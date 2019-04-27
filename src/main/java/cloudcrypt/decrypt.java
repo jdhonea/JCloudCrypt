@@ -3,7 +3,7 @@ package cloudcrypt;
 import java.util.Scanner;
 import static com.kosprov.jargon2.api.Jargon2.*;
 
-public class decrypt {
+public class decrypt extends pathReader {
     public decrypt(String encodedHash) {
         boolean matches = false;
         Scanner in = new Scanner(System.in);

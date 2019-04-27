@@ -24,7 +24,24 @@ public class pathReader {
         return isDirectory;
     }
 
-    public void readPathName() {
-
+    public void readPath() {
+        System.out.println("Path to file or directory: ");
+        try {
+            Scanner pathScanner = new Scanner(System.in);
+            boolean exists = false;
+            String pathName;
+            File file;
+            do {
+                pathName = pathScanner.nextLine();
+                file = new File(pathName);
+                exists = file.exists();
+            } while (!exists);
+            this.isFile = file.isFile();
+            this.isDirectory = file.isDirectory();
+            this.pathName = pathName;
+        } catch (Exception e) {
+            System.out.println("Scanner exception caught.");
+        }
     }
+
 }

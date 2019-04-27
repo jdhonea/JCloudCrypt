@@ -5,36 +5,13 @@ import java.security.SecureRandom;
 import static com.kosprov.jargon2.api.Jargon2.*;
 import java.util.Scanner;
 
-public class encrypt {
+public class encrypt extends pathReader {
     private String password;
-    private boolean isFile = false;
-    private boolean isDirectory = false;
-    private String pathName;
 
     public encrypt() {
         /*
          * this.password = passwordHash(); decrypt decrypt = new decrypt(this.password);
          */
-    }
-
-    public void readPath() {
-        System.out.println("Path to file or directory: ");
-        try {
-            Scanner pathScanner = new Scanner(System.in);
-            boolean exists = false;
-            String pathName;
-            File file;
-            do {
-                pathName = pathScanner.nextLine();
-                file = new File(pathName);
-                exists = file.exists();
-            } while (!exists);
-            this.isFile = file.isFile();
-            this.isDirectory = file.isDirectory();
-            this.pathName = pathName;
-        } catch (Exception e) {
-            System.out.println("Scanner exception caught.");
-        }
     }
 
     private void encryptFile() {
