@@ -17,7 +17,7 @@ public class decrypt {
             if (!matches) {
                 System.out.println("Password is incorrect.");
             }
-        } while (password.length() <= 8);
+        } while (password.length() <= 8 || !matches);
         // in.close();
         System.out.printf("Matches: %s%n", matches);
     }
