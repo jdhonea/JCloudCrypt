@@ -1,8 +1,15 @@
+package cloudcrypt;
+
+/*
+Cloud Crypt
+Author: Jason Honea
+Email: jhonea129@gmail.com
+Website: jhonea.dev
+*/
+
 public class cloudCrypt {
     public static void main(String[] args) {
         // New Window()
-        // TODO: Will be handled elsewhere
-
-        pathReader file = new pathReader();
+        encrypt encryptor = new encrypt();
     }
 }

@@ -1,3 +1,5 @@
+package cloudcrypt;
+
 import java.util.Scanner;
 import java.io.File;
 
@@ -11,6 +13,18 @@ public class pathReader {
         readPathName();
     }
 
+    public String getPathName() {
+        return pathName;
+    }
+
+    public boolean isFile() {
+        return isFile;
+    }
+
+    public boolean isDirectory() {
+        return isDirectory;
+    }
+
     private void readPathName() {
         System.out.println("Path to file or directory: ");
         Scanner in = new Scanner(System.in);
@@ -22,20 +36,9 @@ public class pathReader {
             file = new File(pathName);
             exists = file.exists();
         } while (!exists);
+        // in.close();
         isFile = file.isFile();
         isDirectory = file.isDirectory();
         this.pathName = pathName;
-    }
-
-    public String getPathName() {
-        return pathName;
-    }
-
-    public boolean isFile() {
-        return isFile;
-    }
-
-    public boolean isDirectory() {
-        return isDirectory;
     }
 }
