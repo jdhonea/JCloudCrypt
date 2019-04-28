@@ -11,8 +11,10 @@ public class cloudCrypt {
     public static void main(String[] args) {
         // New Window()
         encrypt encryptor = new encrypt();
-        encryptor.readPath();
-        String encodedHash = encryptor.passwordHash();
+        encryptor.encryptFile();
+        String encodedHash = encryptor.getEncodedHash();
         System.out.printf("Hash: %s%n", encodedHash);
+        decrypt decryptor = new decrypt();
+        decryptor.verifyPass(encodedHash);
     }
 }

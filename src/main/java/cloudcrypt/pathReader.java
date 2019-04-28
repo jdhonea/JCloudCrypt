@@ -7,24 +7,29 @@ public class pathReader {
     private boolean isFile = false;
     private boolean isDirectory = false;
     private String pathName;
+    private String parent;
 
-    public pathReader() {
+    protected pathReader() {
         // Default Constructor
     }
 
-    public String getPathName() {
+    protected String getPathName() {
         return pathName;
     }
 
-    public boolean isFile() {
+    protected boolean isFile() {
         return isFile;
     }
 
-    public boolean isDirectory() {
+    protected boolean isDirectory() {
         return isDirectory;
     }
 
-    public void readPath() {
+    protected String getParent() {
+        return parent;
+    }
+
+    protected String readPath() {
         System.out.println("Path to file or directory: ");
         try {
             Scanner pathScanner = new Scanner(System.in);
@@ -35,13 +40,15 @@ public class pathReader {
                 pathName = pathScanner.nextLine();
                 file = new File(pathName);
                 exists = file.exists();
-            } while (!exists);
+            } while (!exists || !file.isFile());
             this.isFile = file.isFile();
             this.isDirectory = file.isDirectory();
             this.pathName = pathName;
+            this.parent = file.getParent();
         } catch (Exception e) {
-            System.out.println("Scanner exception caught.");
+            e.printStackTrace();
         }
+        return pathName;
     }
 
 }
