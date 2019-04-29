@@ -10,10 +10,6 @@ public class decrypt extends pathReader {
     private String password;
     private String encodedHash;
 
-    public decrypt() {
-        // default constructor
-    }
-
     public void decryptFile() {
     }
 

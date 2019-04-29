@@ -66,23 +66,6 @@
     </pluginRepository>
   </pluginRepositories>
   <build>
-    <sourceDirectory>/home/dupert/Documents/codeWorkSpace/java/cloudcrypt/src/main/java</sourceDirectory>
-    <scriptSourceDirectory>/home/dupert/Documents/codeWorkSpace/java/cloudcrypt/src/main/scripts</scriptSourceDirectory>
-    <testSourceDirectory>/home/dupert/Documents/codeWorkSpace/java/cloudcrypt/src/test/java</testSourceDirectory>
-    <outputDirectory>/home/dupert/Documents/codeWorkSpace/java/cloudcrypt/target/classes</outputDirectory>
-    <testOutputDirectory>/home/dupert/Documents/codeWorkSpace/java/cloudcrypt/target/test-classes</testOutputDirectory>
-    <resources>
-      <resource>
-        <directory>/home/dupert/Documents/codeWorkSpace/java/cloudcrypt/src/main/resources</directory>
-      </resource>
-    </resources>
-    <testResources>
-      <testResource>
-        <directory>/home/dupert/Documents/codeWorkSpace/java/cloudcrypt/src/test/resources</directory>
-      </testResource>
-    </testResources>
-    <directory>/home/dupert/Documents/codeWorkSpace/java/cloudcrypt/target</directory>
-    <finalName>cloudcrypt-1.0</finalName>
     <pluginManagement>
       <plugins>
         <plugin>
@@ -276,7 +259,6 @@
               <goal>site</goal>
             </goals>
             <configuration>
-              <outputDirectory>/home/dupert/Documents/codeWorkSpace/java/cloudcrypt/target/site</outputDirectory>
               <reportPlugins>
                 <reportPlugin>
                   <groupId>org.apache.maven.plugins</groupId>
@@ -292,7 +274,6 @@
               <goal>deploy</goal>
             </goals>
             <configuration>
-              <outputDirectory>/home/dupert/Documents/codeWorkSpace/java/cloudcrypt/target/site</outputDirectory>
               <reportPlugins>
                 <reportPlugin>
                   <groupId>org.apache.maven.plugins</groupId>
@@ -303,7 +284,6 @@
           </execution>
         </executions>
         <configuration>
-          <outputDirectory>/home/dupert/Documents/codeWorkSpace/java/cloudcrypt/target/site</outputDirectory>
           <reportPlugins>
             <reportPlugin>
               <groupId>org.apache.maven.plugins</groupId>
@@ -315,6 +295,5 @@
     </plugins>
   </build>
   <reporting>
-    <outputDirectory>/home/dupert/Documents/codeWorkSpace/java/cloudcrypt/target/site</outputDirectory>
   </reporting>
 </project>

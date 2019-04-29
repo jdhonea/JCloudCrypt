@@ -4,47 +4,43 @@ import java.util.Scanner;
 import java.io.File;
 
 public class pathReader {
-    private boolean isFile = false;
-    private boolean isDirectory = false;
-    private String pathName;
-    private String parent;
+    private static boolean isFile = false;
+    private static boolean isDirectory = false;
+    private static String pathName;
+    private static String parent;
 
-    protected pathReader() {
-        // Default Constructor
-    }
-
-    protected String getPathName() {
+    protected static String getPathName() {
         return pathName;
     }
 
-    protected boolean isFile() {
+    protected static boolean isFile() {
         return isFile;
     }
 
-    protected boolean isDirectory() {
+    protected static boolean isDirectory() {
         return isDirectory;
     }
 
-    protected String getParent() {
+    protected static String getParent() {
         return parent;
     }
 
-    protected String readPath() {
+    protected static String readPath() {
         System.out.println("Path to file or directory: ");
         try {
             Scanner pathScanner = new Scanner(System.in);
             boolean exists = false;
-            String pathName;
+            String path;
             File file;
             do {
-                pathName = pathScanner.nextLine();
-                file = new File(pathName);
+                path = pathScanner.nextLine();
+                file = new File(path);
                 exists = file.exists();
             } while (!exists || !file.isFile());
-            this.isFile = file.isFile();
-            this.isDirectory = file.isDirectory();
-            this.pathName = pathName;
-            this.parent = file.getParent();
+            isFile = file.isFile();
+            isDirectory = file.isDirectory();
+            pathName = path;
+            parent = file.getParent();
         } catch (Exception e) {
             e.printStackTrace();
         }
