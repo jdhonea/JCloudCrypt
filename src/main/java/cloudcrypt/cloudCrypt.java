@@ -10,7 +10,8 @@ Website: jhonea.dev
 public class cloudCrypt {
     public static void main(String[] args) {
         // New Window()
-        encrypt.encryptFile();
+        ui ui = new ui();
+        //encrypt.encryptFile();
         //decrypt decryptor = new decrypt();
         //decryptor.verifyPass(encodedHash);
     }

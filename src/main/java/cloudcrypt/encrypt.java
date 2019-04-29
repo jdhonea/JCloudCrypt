@@ -32,7 +32,7 @@ public class encrypt extends pathReader {
             IvParameterSpec ivspec = new IvParameterSpec(iv);
             Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5PADDING");
             cipher.init(Cipher.ENCRYPT_MODE, skey, ivspec);
-            String outputPath = getPathName() + " - encrypted";
+            String outputPath = getPathName() + ".crypt";
             FileOutputStream fileOut = new FileOutputStream(outputPath);
             CipherOutputStream cipherOut = new CipherOutputStream(fileOut, cipher);
             File file = new File(getPathName());
