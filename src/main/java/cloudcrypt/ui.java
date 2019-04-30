@@ -1,8 +1,11 @@
 package cloudcrypt;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
 import javax.swing.*;
 
-public class ui{
+public class ui implements ActionListener{
     public ui(){
         mainWindow();
     }
@@ -13,11 +16,30 @@ public class ui{
         window.setSize(350,200);
         JTabbedPane tabbedPane = new JTabbedPane();
         JPanel encryptPanel = new JPanel();
+        setupEncryptPanel(encryptPanel);
         JPanel decryptPanel = new JPanel();
+        setupDecryptPanel(decryptPanel);
         tabbedPane.addTab("Encrypt", encryptPanel);
         tabbedPane.addTab("Decrypt", decryptPanel);
-        tabbedPane.setVisible(true);
+        window.add(tabbedPane);
         window.setVisible(true);
+    }
+
+    private void setupEncryptPanel(JPanel panel){
+        JLabel pathLabel = new JLabel("Path to File:");
+        panel.add(pathLabel);
+        JTextField pathField = new JTextField(25);
+        pathField.addActionListener(this);
+        System.out.println(pathField.getText());
+        panel.add(pathField);
+    }
+
+    private void setupDecryptPanel(JPanel panel){
+
+    }
+
+    public void actionPerformed(ActionEvent e) {
+
     }
 }
 
