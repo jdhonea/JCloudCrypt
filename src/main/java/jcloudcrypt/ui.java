@@ -16,6 +16,10 @@ public class ui implements ActionListener {
     JPasswordField encryptKeyField;
     JPasswordField encryptVerifyField;
     File selectedFile;
+    JButton decryptBrowse;
+    JButton decryptButton;
+    JTextField decryptPathField;
+    JPasswordField decryptKeyField;
 
     public ui() {
     }
@@ -32,7 +36,10 @@ public class ui implements ActionListener {
         setupEncryptPanelMid(encryptPanel);
         setupEncryptPanelRight(encryptPanel);
         JPanel decryptPanel = new JPanel();
-        setupDecryptPanel(decryptPanel);
+        decryptPanel.setLayout(new BoxLayout(decryptPanel, BoxLayout.LINE_AXIS));
+        setupDecryptPanelLeft(decryptPanel);
+        setupDecryptPanelMid(decryptPanel);
+        setupDecryptPanelRight(decryptPanel);
         tabbedPane.addTab("Encrypt", encryptPanel);
         tabbedPane.addTab("Decrypt", decryptPanel);
         window.add(tabbedPane);
@@ -90,11 +97,33 @@ public class ui implements ActionListener {
         panel.add(textFieldPane);
     }
 
-    private void setupDecryptPanel(JPanel panel) {
+    private void setupDecryptPanelLeft(JPanel panel) {
+        JPanel textFieldPane = new JPanel();
+        textFieldPane.setLayout(new BoxLayout(textFieldPane, BoxLayout.PAGE_AXIS));
+        JLabel pathLabel = new JLabel("Path to File:");
+        pathLabel.setAlignmentX(Component.RIGHT_ALIGNMENT);
+        textFieldPane.add(pathLabel);
+        JLabel keyLabel = new JLabel("Key:");
+        keyLabel.setAlignmentX(Component.RIGHT_ALIGNMENT);
+        textFieldPane.add(keyLabel);
+        panel.add(textFieldPane);
+    }
+
+    private void setupDecryptPanelMid(JPanel panel) {
+        JPanel textFieldPane = new JPanel();
+        textFieldPane.setLayout(new BoxLayout(textFieldPane, BoxLayout.PAGE_AXIS));
+        decryptPathField = new JTextField(25);
+        decryptPathField.addActionListener(this);
+        textFieldPane.add(decryptPathField);
+        decryptKeyField = new JPasswordField(25);
+        textFieldPane.add(decryptKeyField);
+    }
+
+    private void setupDecryptPanelRight(JPanel panel) {
 
     }
 
-    // TODO: Should be made neater and more legible
+    // TODO: Should be made neater and more legible.
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == encryptButton) {
             // Empty key field
