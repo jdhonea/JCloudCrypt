@@ -1,7 +1,7 @@
 package jcloudcrypt;
 
 /*
-Cloud Crypt
+JCloudCrypt
 Author: Jason Honea
 Email: jhonea129@gmail.com
 Website: jhonea.dev

@@ -103,7 +103,6 @@ public class ui implements ActionListener {
             }
             // Keys not empty and keys match
             else if (Arrays.equals(encryptKeyField.getPassword(), encryptVerifyField.getPassword())) {
-                System.out.println("Matches!");
                 File file = new File(encryptPathField.getText());
                 // Filepath is actually a file
                 if (file.isFile()) {
@@ -112,6 +111,8 @@ public class ui implements ActionListener {
                             "Warning!", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
                     if (confirm == JOptionPane.YES_OPTION) {
                         encrypt.encryptFile(encryptKeyField.getPassword(), file.getPath());
+                        encryptPathField.setText("");
+                        decrypt.decryptFile(encryptKeyField.getPassword(), file.getPath() + ".crypt");
                     }
                 } else {
                     JOptionPane.showMessageDialog(this.window, "File is not valid.", "File Error",
