@@ -110,3 +110,7 @@ public class ui implements ActionListener {
         }
     }
 }
+/*
+ * Done: 1. Password matches 2. Password not empty TODO: Encrypt Button needs to
+ * check if path is a file
+ */
