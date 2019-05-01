@@ -7,15 +7,15 @@
 <!-- ====================================================================== -->
 <!-- ====================================================================== -->
 <!--                                                                        -->
-<!-- Effective POM for project 'dev.jhonea.apps:cloudcrypt:jar:1.0'         -->
+<!-- Effective POM for project 'dev.jhonea.apps:jcloudcrypt:jar:1.0'         -->
 <!--                                                                        -->
 <!-- ====================================================================== -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>dev.jhonea.apps</groupId>
-  <artifactId>cloudcrypt</artifactId>
+  <artifactId>jcloudcrypt</artifactId>
   <version>1.0</version>
-  <name>cloudcrypt</name>
+  <name>jcloudcrypt</name>
   <url>http://www.example.com</url>
   <properties>
     <maven.compiler.source>1.7</maven.compiler.source>
@@ -90,18 +90,18 @@
           <version>1.4.0</version>
           <executions>
             <execution>
-              <id>cloudcrypt</id>
+              <id>jcloudcrypt</id>
               <phase>package</phase>
               <goals>
                 <goal>exec</goal>
               </goals>
               <configuration>
-                <mainClass>cloudcrypt.cloudCrypt</mainClass>
+                <mainClass>jcloudcrypt.jcloudCrypt</mainClass>
               </configuration>
             </execution>
           </executions>
           <configuration>
-            <mainClass>cloudcrypt.cloudCrypt</mainClass>
+            <mainClass>jcloudcrypt.jcloudCrypt</mainClass>
           </configuration>
         </plugin>
         <plugin>
@@ -294,6 +294,5 @@
       </plugin>
     </plugins>
   </build>
-  <reporting>
-  </reporting>
+  <reporting></reporting>
 </project>
