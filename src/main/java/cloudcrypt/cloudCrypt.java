@@ -11,8 +11,9 @@ public class cloudCrypt {
     public static void main(String[] args) {
         // New Window()
         ui ui = new ui();
-        //encrypt.encryptFile();
-        //decrypt decryptor = new decrypt();
-        //decryptor.verifyPass(encodedHash);
+        ui.mainWindow();
+        // encrypt.encryptFile();
+        // decrypt decryptor = new decrypt();
+        // decryptor.verifyPass(encodedHash);
     }
 }
