@@ -65,6 +65,4 @@ public class encrypt {
         }
         return hash;
     }
-
-    // TODO: Develop a regexp for the password requirements
 }

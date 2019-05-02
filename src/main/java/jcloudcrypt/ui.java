@@ -23,7 +23,10 @@ public class ui implements ActionListener {
     JTextField decryptPathField;
     JPasswordField decryptKeyField;
 
-    // TODO: UI needs to look nicer. Temporary UI currently in place
+    // TODO: UI needs to look nicer. Useable UI currently in place
+    // TODO: Check if a file exists by that name before decrypting
+    // TODO: Create a regexp for the password requirements
+    // TODO: Check if key follows key requirements
     public ui() {
     }
 
@@ -214,6 +217,3 @@ public class ui implements ActionListener {
         }
     }// ENDS actionPerformed
 }// ENDS Ui
-
-// TODO: Check if key follows key requirements
-// TODO: Implement decrypt ui
