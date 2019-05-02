@@ -32,7 +32,7 @@ public class encrypt {
             IvParameterSpec ivspec = new IvParameterSpec(iv);
             Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5PADDING");
             cipher.init(Cipher.ENCRYPT_MODE, skey, ivspec);
-            String outputPath = filePath + ".crypt";
+            String outputPath = filePath + ".jcc";
             FileOutputStream fileOut = new FileOutputStream(outputPath);
             CipherOutputStream cipherOut = new CipherOutputStream(fileOut, cipher);
             File file = new File(filePath);

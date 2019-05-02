@@ -54,7 +54,7 @@ public class ui implements ActionListener {
         JFileChooser fileChooser = new JFileChooser();
         if (selector == 'd') {
             fileChooser.setAcceptAllFileFilterUsed(false);
-            fileChooser.addChoosableFileFilter(new FileNameExtensionFilter("*.crypt", "crypt"));
+            fileChooser.addChoosableFileFilter(new FileNameExtensionFilter("*.jcc", "jcc"));
         }
         int returnValue = fileChooser.showOpenDialog(null);
         if (returnValue == JFileChooser.APPROVE_OPTION) {
@@ -163,8 +163,6 @@ public class ui implements ActionListener {
                     if (confirm == JOptionPane.YES_OPTION) {
                         encrypt.encryptFile(encryptKeyField.getPassword(), file.getPath());
                         encryptPathField.setText("");
-                        // decrypt.decryptFile(encryptKeyField.getPassword(), file.getPath() +
-                        // ".crypt");
                     }
                 } else {
                     JOptionPane.showMessageDialog(this.window, "File is not valid.", "File Error",
@@ -185,24 +183,28 @@ public class ui implements ActionListener {
         } else if (e.getSource() == decryptBrowse) {
             browseWindow('d');
         } else if (e.getSource() == decryptButton) {
-            // Key is empty
+            // Path is empty
             if (decryptPathField.getText().equals("")) {
                 JOptionPane.showMessageDialog(this.window, "File is not valid.", "File Error",
                         JOptionPane.ERROR_MESSAGE);
                 decryptKeyField.setText("");
+                // Key is empty
             } else if (decryptKeyField.getPassword().length == 0) {
                 JOptionPane.showMessageDialog(this.window, "Key is empty.", "Key Error", JOptionPane.ERROR_MESSAGE);
             } else {
                 File file = new File(decryptPathField.getText());
                 if (file.isFile()) {
+                    // Checks that key is correct
                     if (decrypt.checkKey(decryptKeyField.getPassword(), file.getPath())) {
                         decrypt.decryptFile(decryptKeyField.getPassword(), file.getPath());
                         decryptKeyField.setText("");
+                        // key is not correct
                     } else {
                         JOptionPane.showMessageDialog(this.window, "Key is incorrect.", "Key Error",
                                 JOptionPane.ERROR_MESSAGE);
                         decryptKeyField.setText("");
                     }
+                    // if path is not a file
                 } else {
                     JOptionPane.showMessageDialog(this.window, "File is not valid.", "File Error",
                             JOptionPane.ERROR_MESSAGE);
