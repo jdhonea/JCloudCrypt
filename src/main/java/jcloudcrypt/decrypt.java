@@ -12,7 +12,6 @@ import javax.crypto.CipherOutputStream;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
-//TODO: Implement decrypt
 public class decrypt {
     static byte[] iv = new byte[16];
     static byte[] saltPlain = new byte[128];
@@ -30,6 +29,7 @@ public class decrypt {
             IvParameterSpec ivspec = new IvParameterSpec(iv);
             Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5PADDING");
             cipher.init(Cipher.DECRYPT_MODE, skey, ivspec);
+            // TODO: Fix naming system to rename it back to old name
             FileOutputStream fileOut = new FileOutputStream(filePath + ".test");
             CipherOutputStream cipherOut = new CipherOutputStream(fileOut, cipher);
             File file = new File(filePath);
@@ -47,6 +47,7 @@ public class decrypt {
     }
 
     public static boolean checkKey(char[] key, String filePath) {
+        boolean matches = false;
         try (ByteArray keyBytes = toByteArray(key)) {
             Arrays.fill(key, ' ');
             Verifier verifier = jargon2Verifier().type(Type.ARGON2d) // Data-dependent hashing
@@ -55,13 +56,12 @@ public class decrypt {
                     .parallelism(4); // use 4 lanes and 4 threads
             getPrependData(filePath);
 
-            boolean matches = verifier.hash(plainHash).salt(saltPlain).password(keyBytes).verifyRaw();
-            System.out.println(matches);
+            matches = verifier.hash(plainHash).salt(saltPlain).password(keyBytes).verifyRaw();
 
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return false;
+        return matches;
     }
 
     private static void getPrependData(String filePath) {

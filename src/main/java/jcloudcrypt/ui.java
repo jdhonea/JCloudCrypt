@@ -1,12 +1,14 @@
 package jcloudcrypt;
 
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.util.Arrays;
 
 import javax.swing.*;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 public class ui implements ActionListener {
     JFrame window;
@@ -21,6 +23,7 @@ public class ui implements ActionListener {
     JTextField decryptPathField;
     JPasswordField decryptKeyField;
 
+    // TODO: UI needs to look nicer. Temporary UI currently in place
     public ui() {
     }
 
@@ -28,7 +31,7 @@ public class ui implements ActionListener {
         window = new JFrame("JCloudCrypt");
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         window.pack();
-        // window.setResizable(false);
+        window.setResizable(false);
         JTabbedPane tabbedPane = new JTabbedPane();
         JPanel encryptPanel = new JPanel();
         encryptPanel.setLayout(new BoxLayout(encryptPanel, BoxLayout.LINE_AXIS));
@@ -47,12 +50,20 @@ public class ui implements ActionListener {
         window.setVisible(true);
     }
 
-    private void browseWindow() {
+    private void browseWindow(char selector) {
         JFileChooser fileChooser = new JFileChooser();
+        if (selector == 'd') {
+            fileChooser.setAcceptAllFileFilterUsed(false);
+            fileChooser.addChoosableFileFilter(new FileNameExtensionFilter("*.crypt", "crypt"));
+        }
         int returnValue = fileChooser.showOpenDialog(null);
         if (returnValue == JFileChooser.APPROVE_OPTION) {
             selectedFile = fileChooser.getSelectedFile();
-            encryptPathField.setText(selectedFile.getAbsolutePath());
+            if (selector == 'e') {
+                encryptPathField.setText(selectedFile.getAbsolutePath());
+            } else if (selector == 'd') {
+                decryptPathField.setText(selectedFile.getAbsolutePath());
+            }
         }
     }
 
@@ -75,7 +86,6 @@ public class ui implements ActionListener {
         JPanel textFieldPane = new JPanel();
         textFieldPane.setLayout(new BoxLayout(textFieldPane, BoxLayout.PAGE_AXIS));
         encryptPathField = new JTextField(25);
-        encryptPathField.addActionListener(this);
         textFieldPane.add(encryptPathField);
         encryptKeyField = new JPasswordField(25);
         textFieldPane.add(encryptKeyField);
@@ -103,6 +113,7 @@ public class ui implements ActionListener {
         JLabel pathLabel = new JLabel("Path to File:");
         pathLabel.setAlignmentX(Component.RIGHT_ALIGNMENT);
         textFieldPane.add(pathLabel);
+        textFieldPane.add(Box.createRigidArea(new Dimension(0, 15)));
         JLabel keyLabel = new JLabel("Key:");
         keyLabel.setAlignmentX(Component.RIGHT_ALIGNMENT);
         textFieldPane.add(keyLabel);
@@ -115,12 +126,23 @@ public class ui implements ActionListener {
         decryptPathField = new JTextField(25);
         decryptPathField.addActionListener(this);
         textFieldPane.add(decryptPathField);
+        textFieldPane.add(Box.createRigidArea(new Dimension(0, 8)));
         decryptKeyField = new JPasswordField(25);
         textFieldPane.add(decryptKeyField);
+        panel.add(textFieldPane);
     }
 
     private void setupDecryptPanelRight(JPanel panel) {
-
+        JPanel textFieldPane = new JPanel();
+        textFieldPane.setLayout(new BoxLayout(textFieldPane, BoxLayout.PAGE_AXIS));
+        decryptBrowse = new JButton("Browse");
+        decryptBrowse.addActionListener(this);
+        textFieldPane.add(decryptBrowse);
+        textFieldPane.add(Box.createRigidArea(new Dimension(0, 8)));
+        decryptButton = new JButton("Decrypt");
+        decryptButton.addActionListener(this);
+        textFieldPane.add(decryptButton);
+        panel.add(textFieldPane);
     }
 
     // TODO: Should be made neater and more legible.
@@ -141,7 +163,8 @@ public class ui implements ActionListener {
                     if (confirm == JOptionPane.YES_OPTION) {
                         encrypt.encryptFile(encryptKeyField.getPassword(), file.getPath());
                         encryptPathField.setText("");
-                        decrypt.decryptFile(encryptKeyField.getPassword(), file.getPath() + ".crypt");
+                        // decrypt.decryptFile(encryptKeyField.getPassword(), file.getPath() +
+                        // ".crypt");
                     }
                 } else {
                     JOptionPane.showMessageDialog(this.window, "File is not valid.", "File Error",
@@ -158,7 +181,34 @@ public class ui implements ActionListener {
                 encryptVerifyField.setText("");
             }
         } else if (e.getSource() == encryptBrowse) {
-            browseWindow();
+            browseWindow('e');
+        } else if (e.getSource() == decryptBrowse) {
+            browseWindow('d');
+        } else if (e.getSource() == decryptButton) {
+            // Key is empty
+            if (decryptPathField.getText().equals("")) {
+                JOptionPane.showMessageDialog(this.window, "File is not valid.", "File Error",
+                        JOptionPane.ERROR_MESSAGE);
+                decryptKeyField.setText("");
+            } else if (decryptKeyField.getPassword().length == 0) {
+                JOptionPane.showMessageDialog(this.window, "Key is empty.", "Key Error", JOptionPane.ERROR_MESSAGE);
+            } else {
+                File file = new File(decryptPathField.getText());
+                if (file.isFile()) {
+                    if (decrypt.checkKey(decryptKeyField.getPassword(), file.getPath())) {
+                        decrypt.decryptFile(decryptKeyField.getPassword(), file.getPath());
+                        decryptKeyField.setText("");
+                    } else {
+                        JOptionPane.showMessageDialog(this.window, "Key is incorrect.", "Key Error",
+                                JOptionPane.ERROR_MESSAGE);
+                        decryptKeyField.setText("");
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(this.window, "File is not valid.", "File Error",
+                            JOptionPane.ERROR_MESSAGE);
+                    decryptKeyField.setText("");
+                }
+            }
         }
     }// ENDS actionPerformed
 }// ENDS Ui
