@@ -51,12 +51,12 @@ public class encrypt {
         }
     }
 
-    private static byte[] passwordHash(ByteArray passBytes, byte[] salt) {
+    public static byte[] passwordHash(ByteArray passBytes, byte[] salt) {
         byte[] hash = new byte[0];
         try {
-            Hasher hasher = jargon2Hasher().type(Type.ARGON2d) // Data-dependent hashing
-                    .memoryCost(65536) // 64MB memory cost
-                    .timeCost(3) // 3 passes through memory
+            Hasher hasher = jargon2Hasher().type(Type.ARGON2id) // Data-dependent hashing
+                    .memoryCost(131072) // 128MB memory cost
+                    .timeCost(30) // 50 passes through memory
                     .parallelism(4) // use 4 lanes and 4 threads
                     .hashLength(32); // 32 bytes output hash
             hash = hasher.salt(salt).password(passBytes).rawHash();
