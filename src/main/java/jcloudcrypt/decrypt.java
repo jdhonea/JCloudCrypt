@@ -50,9 +50,9 @@ public class decrypt {
         boolean matches = false;
         try (ByteArray keyBytes = toByteArray(key)) {
             Arrays.fill(key, ' ');
-            Verifier verifier = jargon2Verifier().type(Type.ARGON2d) // Data-dependent hashing
-                    .memoryCost(65536) // 64MB memory cost
-                    .timeCost(3) // 3 passes through memory
+            Verifier verifier = jargon2Verifier().type(Type.ARGON2id) // Data-dependent hashing
+                    .memoryCost(131072) // 128MB memory cost
+                    .timeCost(20) // 30 passes through memory
                     .parallelism(4); // use 4 lanes and 4 threads
             getPrependData(filePath);
 
@@ -86,9 +86,9 @@ public class decrypt {
     private static byte[] getPassHash(ByteArray passBytes, byte[] salt) {
         byte[] hash = new byte[0];
         try {
-            Hasher hasher = jargon2Hasher().type(Type.ARGON2d) // Data-dependent hashing
-                    .memoryCost(65536) // 64MB memory cost
-                    .timeCost(3) // 3 passes through memory
+            Hasher hasher = jargon2Hasher().type(Type.ARGON2id) // Data-dependent hashing
+                    .memoryCost(131072) // 128MB memory cost
+                    .timeCost(20) // 30 passes through memory
                     .parallelism(4) // use 4 lanes and 4 threads
                     .hashLength(32); // 32 bytes output hash
             hash = hasher.salt(salt).password(passBytes).rawHash();
