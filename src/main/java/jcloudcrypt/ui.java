@@ -22,6 +22,7 @@ public class ui implements ActionListener {
     JButton decryptButton;
     JTextField decryptPathField;
     JPasswordField decryptKeyField;
+    JCheckBox obfuscateName;
 
     public ui() {
     }
@@ -103,6 +104,8 @@ public class ui implements ActionListener {
         encryptButton = new JButton("Encrypt");
         encryptButton.addActionListener(this);
         textFieldPane.add(encryptButton);
+        obfuscateName = new JCheckBox("Obfuscate filename");
+        textFieldPane.add(obfuscateName);
         panel.add(textFieldPane);
     }
 
@@ -147,6 +150,7 @@ public class ui implements ActionListener {
     // TODO: Should be made neater and more legible.
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == encryptButton) {
+            System.out.println(obfuscateName.isSelected());
             // Empty key field
             if (encryptKeyField.getPassword().length == 0) {
                 JOptionPane.showMessageDialog(this.window, "Key field is empty.");

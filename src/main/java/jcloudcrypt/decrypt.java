@@ -13,10 +13,10 @@ import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
 public class decrypt {
-    static byte[] iv = new byte[16];
-    static byte[] saltPlain = new byte[128];
-    static byte[] saltPass = new byte[128];
-    static byte[] plainHash = new byte[32];
+    private static byte[] iv = new byte[constants.IVLEN];
+    private static byte[] saltPlain = new byte[constants.SALTLEN];
+    private static byte[] saltPass = new byte[constants.SALTLEN];
+    private static byte[] plainHash = new byte[constants.HASHLEN];
 
     public static void decryptFile(char[] password, String filePath) {
         try {
@@ -37,7 +37,8 @@ public class decrypt {
             byte[] buffer = new byte[2048];
             int count;
             // Gets rid of the prepend data.
-            count = fileInput.read(new byte[304]);
+            int prepData = iv.length + saltPlain.length + saltPass.length + plainHash.length;
+            count = fileInput.read(new byte[prepData]);
             while ((count = fileInput.read(buffer)) > 0) {
                 cipherOut.write(buffer, 0, count);
             }
@@ -51,9 +52,9 @@ public class decrypt {
         try (ByteArray keyBytes = toByteArray(key)) {
             Arrays.fill(key, ' ');
             Verifier verifier = jargon2Verifier().type(Type.ARGON2id) // Data-dependent hashing
-                    .memoryCost(131072) // 128MB memory cost
-                    .timeCost(20) // 30 passes through memory
-                    .parallelism(4); // use 4 lanes and 4 threads
+                    .memoryCost(constants.MEMORYCOST) // 128MB memory cost
+                    .timeCost(constants.TIMECOST) // 30 passes through memory
+                    .parallelism(constants.PARALLELISM); // use 4 lanes and 4 threads
             getPrependData(filePath);
 
             matches = verifier.hash(plainHash).salt(saltPlain).password(keyBytes).verifyRaw();
@@ -87,10 +88,10 @@ public class decrypt {
         byte[] hash = new byte[0];
         try {
             Hasher hasher = jargon2Hasher().type(Type.ARGON2id) // Data-dependent hashing
-                    .memoryCost(131072) // 128MB memory cost
-                    .timeCost(20) // 30 passes through memory
-                    .parallelism(4) // use 4 lanes and 4 threads
-                    .hashLength(32); // 32 bytes output hash
+                    .memoryCost(constants.MEMORYCOST) // 128MB memory cost
+                    .timeCost(constants.TIMECOST) // 30 passes through memory
+                    .parallelism(constants.PARALLELISM) // use 4 lanes and 4 threads
+                    .hashLength(constants.HASHLEN); // 32 bytes output hash
             hash = hasher.salt(salt).password(passBytes).rawHash();
         } catch (Exception e) {
             e.printStackTrace();

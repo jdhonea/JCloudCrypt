@@ -16,9 +16,9 @@ public class encrypt {
 
     public static void encryptFile(char[] password, String filePath) {
         try {
-            byte[] iv = new byte[16];
-            byte[] saltPlain = new byte[128];
-            byte[] saltPass = new byte[128];
+            byte[] iv = new byte[constants.IVLEN];
+            byte[] saltPlain = new byte[constants.SALTLEN];
+            byte[] saltPass = new byte[constants.SALTLEN];
             ByteArray passBytes = toByteArray(password);
             SecureRandom secureRandom = new SecureRandom();
             secureRandom.nextBytes(iv);
@@ -35,6 +35,7 @@ public class encrypt {
             String outputPath = filePath + ".jcc";
             FileOutputStream fileOut = new FileOutputStream(outputPath);
             CipherOutputStream cipherOut = new CipherOutputStream(fileOut, cipher);
+            // Write to encrypted file
             File file = new File(filePath);
             FileInputStream fileInput = new FileInputStream(file);
             byte[] buffer = new byte[2048];
@@ -46,6 +47,7 @@ public class encrypt {
             while ((count = fileInput.read(buffer)) > 0) {
                 cipherOut.write(buffer, 0, count);
             }
+            // END Write
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -55,10 +57,10 @@ public class encrypt {
         byte[] hash = new byte[0];
         try {
             Hasher hasher = jargon2Hasher().type(Type.ARGON2id) // Data-dependent hashing
-                    .memoryCost(131072) // 128MB memory cost
-                    .timeCost(20) // 30 passes through memory
-                    .parallelism(4) // use 4 lanes and 4 threads
-                    .hashLength(32); // 32 bytes output hash
+                    .memoryCost(constants.MEMORYCOST) // 128MB memory cost
+                    .timeCost(constants.TIMECOST) // 30 passes through memory
+                    .parallelism(constants.PARALLELISM) // use 4 lanes and 4 threads
+                    .hashLength(constants.HASHLEN); // 32 bytes output hash
             hash = hasher.salt(salt).password(passBytes).rawHash();
         } catch (Exception e) {
             e.printStackTrace();
