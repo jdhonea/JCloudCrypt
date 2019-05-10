@@ -3,6 +3,7 @@ package jcloudcrypt;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.nio.charset.StandardCharsets;
 import java.security.SecureRandom;
 import static com.kosprov.jargon2.api.Jargon2.*;
 
@@ -19,6 +20,7 @@ public class encrypt {
             byte[] iv = new byte[constants.IVLEN];
             byte[] saltPlain = new byte[constants.SALTLEN];
             byte[] saltPass = new byte[constants.SALTLEN];
+            byte[] fileName = new byte[constants.MAXFILENAME];
             ByteArray passBytes = toByteArray(password);
             SecureRandom secureRandom = new SecureRandom();
             secureRandom.nextBytes(iv);
@@ -38,12 +40,14 @@ public class encrypt {
             // Write to encrypted file
             File file = new File(filePath);
             FileInputStream fileInput = new FileInputStream(file);
+            fileName = file.getName().getBytes(StandardCharsets.UTF_8);
             byte[] buffer = new byte[2048];
             int count;
             fileOut.write(iv);
             fileOut.write(saltPass);
             fileOut.write(plainTextHash);
             fileOut.write(saltPlain);
+            cipherOut.write(fileName);
             while ((count = fileInput.read(buffer)) > 0) {
                 cipherOut.write(buffer, 0, count);
             }
