@@ -14,7 +14,7 @@ import javax.crypto.spec.SecretKeySpec;
 
 public class encrypt {
 
-    public static void encryptFile(char[] password, String filePath) {
+    public void encryptFile(char[] password, String filePath) {
         try {
             byte[] iv = new byte[constants.IVLEN];
             byte[] saltPlain = new byte[constants.SALTLEN];
@@ -53,7 +53,7 @@ public class encrypt {
         }
     }
 
-    public static byte[] passwordHash(ByteArray passBytes, byte[] salt) {
+    public byte[] passwordHash(ByteArray passBytes, byte[] salt) {
         byte[] hash = new byte[0];
         try {
             Hasher hasher = jargon2Hasher().type(Type.ARGON2id) // Data-dependent hashing

@@ -13,12 +13,12 @@ import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
 public class decrypt {
-    private static byte[] iv = new byte[constants.IVLEN];
-    private static byte[] saltPlain = new byte[constants.SALTLEN];
-    private static byte[] saltPass = new byte[constants.SALTLEN];
-    private static byte[] plainHash = new byte[constants.HASHLEN];
+    private byte[] iv = new byte[constants.IVLEN];
+    private byte[] saltPlain = new byte[constants.SALTLEN];
+    private byte[] saltPass = new byte[constants.SALTLEN];
+    private byte[] plainHash = new byte[constants.HASHLEN];
 
-    public static void decryptFile(char[] password, String filePath) {
+    public void decryptFile(char[] password, String filePath) {
         try {
             ByteArray passBytes = toByteArray(password);
             Arrays.fill(password, ' ');
@@ -47,7 +47,7 @@ public class decrypt {
         }
     }
 
-    public static boolean checkKey(char[] key, String filePath) {
+    public boolean checkKey(char[] key, String filePath) {
         boolean matches = false;
         try (ByteArray keyBytes = toByteArray(key)) {
             Arrays.fill(key, ' ');
@@ -65,7 +65,7 @@ public class decrypt {
         return matches;
     }
 
-    private static void getPrependData(String filePath) {
+    private void getPrependData(String filePath) {
         try {
             File inFile = new File(filePath);
             FileInputStream file = new FileInputStream(inFile);
@@ -84,7 +84,7 @@ public class decrypt {
         }
     }
 
-    private static byte[] getPassHash(ByteArray passBytes, byte[] salt) {
+    private byte[] getPassHash(ByteArray passBytes, byte[] salt) {
         byte[] hash = new byte[0];
         try {
             Hasher hasher = jargon2Hasher().type(Type.ARGON2id) // Data-dependent hashing

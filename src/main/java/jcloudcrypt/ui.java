@@ -105,7 +105,7 @@ public class ui implements ActionListener {
         encryptButton.addActionListener(this);
         textFieldPane.add(encryptButton);
         obfuscateName = new JCheckBox("Obfuscate filename");
-        textFieldPane.add(obfuscateName);
+        // textFieldPane.add(obfuscateName);
         panel.add(textFieldPane);
     }
 
@@ -150,7 +150,7 @@ public class ui implements ActionListener {
     // TODO: Should be made neater and more legible.
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == encryptButton) {
-            System.out.println(obfuscateName.isSelected());
+            // System.out.println(obfuscateName.isSelected());
             // Empty key field
             if (encryptKeyField.getPassword().length == 0) {
                 JOptionPane.showMessageDialog(this.window, "Key field is empty.");
@@ -164,7 +164,8 @@ public class ui implements ActionListener {
                             "Please safely store or remember your keys.\nIf lost, the data is not recoverable.\n\nDo you wish to continue?",
                             "Warning!", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
                     if (confirm == JOptionPane.YES_OPTION) {
-                        encrypt.encryptFile(encryptKeyField.getPassword(), file.getPath());
+                        encrypt encryption = new encrypt();
+                        encryption.encryptFile(encryptKeyField.getPassword(), file.getPath());
                         encryptPathField.setText("");
                     }
                 } else {
@@ -196,10 +197,11 @@ public class ui implements ActionListener {
                 JOptionPane.showMessageDialog(this.window, "Key is empty.", "Key Error", JOptionPane.ERROR_MESSAGE);
             } else {
                 File file = new File(decryptPathField.getText());
+                decrypt decryption = new decrypt();
                 if (file.isFile()) {
                     // Checks that key is correct
-                    if (decrypt.checkKey(decryptKeyField.getPassword(), file.getPath())) {
-                        decrypt.decryptFile(decryptKeyField.getPassword(), file.getPath());
+                    if (decryption.checkKey(decryptKeyField.getPassword(), file.getPath())) {
+                        decryption.decryptFile(decryptKeyField.getPassword(), file.getPath());
                         decryptKeyField.setText("");
                         // key is not correct
                     } else {
