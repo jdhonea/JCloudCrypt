@@ -30,8 +30,8 @@ public class decrypt {
             IvParameterSpec ivspec = new IvParameterSpec(iv);
             Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5PADDING");
             cipher.init(Cipher.DECRYPT_MODE, skey, ivspec);
-            filePath = FilenameUtils.removeExtension(filePath);
-            FileOutputStream fileOut = new FileOutputStream(filePath);
+            String newFilePath = FilenameUtils.removeExtension(filePath);
+            FileOutputStream fileOut = new FileOutputStream(newFilePath);
             CipherOutputStream cipherOut = new CipherOutputStream(fileOut, cipher);
             File file = new File(filePath);
             FileInputStream fileInput = new FileInputStream(file);

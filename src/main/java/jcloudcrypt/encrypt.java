@@ -47,6 +47,8 @@ public class encrypt {
             while ((count = fileInput.read(buffer)) > 0) {
                 cipherOut.write(buffer, 0, count);
             }
+            // fileInput.close();
+            // cipherOut.close();
             // END Write
         } catch (Exception e) {
             e.printStackTrace();
