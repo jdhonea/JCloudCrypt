@@ -4,7 +4,7 @@ package jcloudcrypt;
 //Java 2 bytes per char
 
 // TODO: Get test cases setup
-// TODO: Format code! -encrypt.java in progress
+// TODO: Format code!
 // TODO: Get error messages setup for user.
 // TODO: Get a keys file setup
 // TODO: Allow obfuscating the filename, encrypting it and storing it in the beginning of the file
