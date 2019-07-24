@@ -26,6 +26,8 @@ public class decrypt {
     public int decryptFile(char[] password, String filePath) {
         FileOutputStream fileOut = null;
         FileInputStream fileInput = null;
+        if (password == null)
+            return 5;
         ByteArray passBytes = toByteArray(password);
         Arrays.fill(password, ' ');
         int prependReturn = getPrependData(filePath);
@@ -117,6 +119,13 @@ public class decrypt {
         } catch (IOException e) {
             e.printStackTrace();
             return 2;
+        }
+        try {
+            if (file != null)
+                file.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return 3;
         }
         return 0;
     }
