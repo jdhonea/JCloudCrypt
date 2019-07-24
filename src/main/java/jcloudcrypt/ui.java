@@ -147,7 +147,6 @@ public class ui implements ActionListener {
         panel.add(textFieldPane);
     }
 
-    // TODO: Should be made neater and more legible.
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == encryptButton) {
             // System.out.println(obfuscateName.isSelected());
