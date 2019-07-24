@@ -9,11 +9,9 @@ package jcloudcrypt;
 // TODO: Get a keys file setup
 // TODO: Allow obfuscating the filename, encrypting it and storing it in the beginning of the file
 // TODO: UI needs to look nicer. Functional UI currently in place
-// TODO: Implement an "Advanced" settings option - allow user to set hashing settings
+// TODO: Implement an "Advanced" settings option - allow user to set hashing settings, etc.
 // TODO: Create a regexp for the password requirements - maybe
 // TODO: Restructure *all* of UI code
-// WAY down the line:
-// TODO: Would like to implement my own Argon2 api eventually
 
 public class jcloudCrypt {
     public static void main(String[] args) {

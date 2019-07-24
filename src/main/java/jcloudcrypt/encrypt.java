@@ -26,6 +26,7 @@ public class encrypt {
     private byte[] passwordHash;
 
     public int encryptFile(char[] password, String filePath) {
+        int returnVal = 0;
         FileInputStream fileInput = null;
         CipherOutputStream cipherOut = null;
         FileOutputStream fileOut = null;
@@ -41,7 +42,7 @@ public class encrypt {
             passBytes.close();
         } catch (Exception e) {
             e.printStackTrace();
-            return 1;
+            returnVal = 1;
         }
         Cipher cipher = buildCipher(passwordHash, iv);
         String outputPath = filePath + ".jcc";
@@ -52,11 +53,11 @@ public class encrypt {
             fileInput = new FileInputStream(file);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
-            return 2;
+            returnVal = 2;
         }
         int writeReturn = writeToFile(fileOut, fileInput, cipherOut);
         if (writeReturn == 1) // Fails to write to file
-            return 3;
+            returnVal = 3;
         try {
             if (fileInput != null)
                 fileInput.close();
@@ -64,9 +65,9 @@ public class encrypt {
                 cipherOut.close();
         } catch (IOException e) {
             e.printStackTrace();
-            return 4;
+            returnVal = 4;
         }
-        return 0;
+        return returnVal;
     }
 
     private Cipher buildCipher(byte[] passwordHash, byte[] iv) {
