@@ -1,6 +1,7 @@
 package jcloudcrypt;
 
 import static com.kosprov.jargon2.api.Jargon2.*;
+import org.apache.commons.io.FilenameUtils;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -29,8 +30,8 @@ public class decrypt {
             IvParameterSpec ivspec = new IvParameterSpec(iv);
             Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5PADDING");
             cipher.init(Cipher.DECRYPT_MODE, skey, ivspec);
-            // TODO: Fix naming system to rename it back to old name
-            FileOutputStream fileOut = new FileOutputStream(filePath + ".test");
+            filePath = FilenameUtils.removeExtension(filePath);
+            FileOutputStream fileOut = new FileOutputStream(filePath);
             CipherOutputStream cipherOut = new CipherOutputStream(fileOut, cipher);
             File file = new File(filePath);
             FileInputStream fileInput = new FileInputStream(file);
@@ -98,5 +99,4 @@ public class decrypt {
         }
         return hash;
     }
-
 }
