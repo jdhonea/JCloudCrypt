@@ -24,14 +24,13 @@ public class decrypt {
     private byte[] plainHash = new byte[constants.HASHLEN];
 
     public int decryptFile(char[] password, String filePath) {
-        int returnVal = 0;
         FileOutputStream fileOut = null;
         FileInputStream fileInput = null;
         ByteArray passBytes = toByteArray(password);
         Arrays.fill(password, ' ');
         int prependReturn = getPrependData(filePath);
         if (prependReturn != 0)
-            returnVal = 1;
+            return 1;
         byte[] passHash = getPassHash(passBytes, saltPass);
         passBytes.clear();
         Cipher cipher = buildCipher(passHash);
@@ -42,12 +41,12 @@ public class decrypt {
             fileInput = new FileInputStream(file);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
-            returnVal = 2;
+            return 2;
         }
         CipherOutputStream cipherOut = new CipherOutputStream(fileOut, cipher);
         int writeReturn = writeToFile(fileInput, cipherOut);
         if (writeReturn != 0)
-            returnVal = 3;
+            return 3;
         try {
             if (fileInput != null)
                 fileInput.close();
@@ -55,9 +54,9 @@ public class decrypt {
                 cipherOut.close();
         } catch (IOException e) {
             e.printStackTrace();
-            returnVal = 4;
+            return 4;
         }
-        return returnVal;
+        return 0;
     }
 
     public boolean checkKey(char[] key, String filePath) {
@@ -98,7 +97,6 @@ public class decrypt {
     }
 
     private int getPrependData(String filePath) {
-        int returnVal = 0;
         FileInputStream file = null;
         try {
             File inFile = new File(filePath);
@@ -115,12 +113,12 @@ public class decrypt {
             }
         } catch (FileNotFoundException e) {
             e.printStackTrace();
-            returnVal = 1;
+            return 1;
         } catch (IOException e) {
             e.printStackTrace();
-            returnVal = 2;
+            return 2;
         }
-        return returnVal;
+        return 0;
     }
 
     private byte[] getPassHash(ByteArray passBytes, byte[] salt) {
