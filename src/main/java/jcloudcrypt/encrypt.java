@@ -30,6 +30,7 @@ public class encrypt {
         CipherOutputStream cipherOut = null;
         FileOutputStream fileOut = null;
         ByteArray passBytes = toByteArray(password);
+        Arrays.fill(password, ' '); // clears out the plain text password
         SecureRandom secureRandom = new SecureRandom();
         secureRandom.nextBytes(iv);
         secureRandom.nextBytes(saltPlain);
@@ -42,7 +43,6 @@ public class encrypt {
             e.printStackTrace();
             return 1;
         }
-        Arrays.fill(password, ' ');
         Cipher cipher = buildCipher(passwordHash, iv);
         String outputPath = filePath + ".jcc";
         try {
