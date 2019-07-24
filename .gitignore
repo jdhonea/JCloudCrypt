@@ -6,6 +6,7 @@
 *.log
 .*
 !.gitignore
+!.travis.yml
 App*.java
 .project
 target/

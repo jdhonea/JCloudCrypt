@@ -53,7 +53,7 @@ public class encrypt {
             File file = new File(filePath);
             fileInput = new FileInputStream(file);
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            // e.printStackTrace();
             return 2;
         }
         int writeReturn = writeToFile(fileOut, fileInput, cipherOut);
