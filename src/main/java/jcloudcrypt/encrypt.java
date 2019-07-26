@@ -118,4 +118,14 @@ public class encrypt {
         hash = hasher.salt(salt).password(passBytes).rawHash();
         return hash;
     }
+
+    public String generateName(){
+        String name = "";
+        for (int n = 0; n < 25; n++){
+            int value = (int)(Math.random()* 26) + 97;
+            char letter = (char)value;
+            name += letter;
+        }
+        return name;
+    }
 }
