@@ -59,15 +59,6 @@ public class encrypt {
         int writeReturn = writeToFile(fileOut, fileInput, cipherOut);
         if (writeReturn != 0) // Fails to write to file
             return 3;
-        // try {
-        //     if (fileInput != null)
-        //         fileInput.close();
-        //     if (cipherOut != null)
-        //         cipherOut.close();
-        // } catch (IOException e) {
-        //     e.printStackTrace();
-        //     return 4;
-        // }
         return 0;
     }
 

@@ -105,7 +105,7 @@ public class ui implements ActionListener {
         encryptButton.addActionListener(this);
         textFieldPane.add(encryptButton);
         obfuscateName = new JCheckBox("Obfuscate filename");
-        // textFieldPane.add(obfuscateName);
+        textFieldPane.add(obfuscateName);
         panel.add(textFieldPane);
     }
 
@@ -164,7 +164,8 @@ public class ui implements ActionListener {
                             "Warning!", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
                     if (confirm == JOptionPane.YES_OPTION) {
                         encrypt encryption = new encrypt();
-                        encryption.encryptFile(encryptKeyField.getPassword(), file.getPath(), obfuscateName.isSelected());
+                        encryption.encryptFile(encryptKeyField.getPassword(), file.getPath(),
+                                obfuscateName.isSelected());
                         encryptPathField.setText("");
                     }
                 } else {
