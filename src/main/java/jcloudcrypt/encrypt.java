@@ -25,7 +25,7 @@ public class encrypt {
     private byte[] plainTextHash;
     private byte[] passwordHash;
 
-    public int encryptFile(char[] password, String filePath) {
+    public int encryptFile(char[] password, String filePath, boolean obfuscateName) {
         FileInputStream fileInput = null;
         CipherOutputStream cipherOut = null;
         FileOutputStream fileOut = null;
@@ -57,17 +57,17 @@ public class encrypt {
             return 2;
         }
         int writeReturn = writeToFile(fileOut, fileInput, cipherOut);
-        if (writeReturn == 1) // Fails to write to file
+        if (writeReturn != 0) // Fails to write to file
             return 3;
-        try {
-            if (fileInput != null)
-                fileInput.close();
-            if (cipherOut != null)
-                cipherOut.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-            return 4;
-        }
+        // try {
+        //     if (fileInput != null)
+        //         fileInput.close();
+        //     if (cipherOut != null)
+        //         cipherOut.close();
+        // } catch (IOException e) {
+        //     e.printStackTrace();
+        //     return 4;
+        // }
         return 0;
     }
 
@@ -92,7 +92,7 @@ public class encrypt {
 
     private int writeToFile(FileOutputStream fileOut, FileInputStream fileInput, CipherOutputStream cipherOut) {
         byte[] buffer = new byte[2048];
-        int count;
+        int count, returnVal = 0;
         try {
             fileOut.write(iv);
             fileOut.write(saltPass);
@@ -101,11 +101,22 @@ public class encrypt {
             while ((count = fileInput.read(buffer)) > 0) {
                 cipherOut.write(buffer, 0, count);
             }
-            return 0;
         } catch (IOException e) {
             e.printStackTrace();
-            return 1;
+            returnVal = 1;
         }
+        try{
+            if (fileInput != null)
+                fileInput.close();
+            if (cipherOut != null)
+                cipherOut.close();
+            if (fileOut != null)
+                fileOut.close();
+        } catch (IOException e){
+            e.printStackTrace();
+            returnVal = 2;
+        }
+        return returnVal;
     }
 
     private byte[] passwordHash(ByteArray passBytes, byte[] salt) {
@@ -119,7 +130,7 @@ public class encrypt {
         return hash;
     }
 
-    public String generateName(){
+    private String generateName(){
         String name = "";
         for (int n = 0; n < 25; n++){
             int value = (int)(Math.random()* 26) + 97;
