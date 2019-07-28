@@ -1,13 +1,9 @@
 package jcloudcrypt;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
-
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-
 import org.apache.commons.io.FileUtils;
 import org.junit.Rule;
 import org.junit.Test;
@@ -61,6 +57,7 @@ public class decryptTest {
             assertTrue(FileUtils.contentEquals(file, file2));
         } catch (IOException e) {
             e.printStackTrace();
+            assertTrue(false);
         }
     }
 }

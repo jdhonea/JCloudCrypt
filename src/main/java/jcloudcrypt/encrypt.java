@@ -24,6 +24,7 @@ public class encrypt {
     private byte[] saltPass = new byte[constants.SALTLEN];
     private byte[] plainTextHash;
     private byte[] passwordHash;
+    private byte obFlag;
 
     public int encryptFile(char[] password, String filePath, boolean obfuscateName) {
         FileInputStream fileInput = null;
@@ -31,6 +32,7 @@ public class encrypt {
         FileOutputStream fileOut = null;
         if (password == null)
             return 5;
+        obFlag = (obfuscateName) ? (byte) 1 : (byte) 0;
         ByteArray passBytes = toByteArray(password);
         Arrays.fill(password, ' '); // clears out the plain text password
         SecureRandom secureRandom = new SecureRandom();
@@ -85,6 +87,7 @@ public class encrypt {
         byte[] buffer = new byte[2048];
         int count, returnVal = 0;
         try {
+            fileOut.write(obFlag);
             fileOut.write(iv);
             fileOut.write(saltPass);
             fileOut.write(plainTextHash);
@@ -96,14 +99,14 @@ public class encrypt {
             e.printStackTrace();
             returnVal = 1;
         }
-        try{
+        try {
             if (fileInput != null)
                 fileInput.close();
             if (cipherOut != null)
                 cipherOut.close();
             if (fileOut != null)
                 fileOut.close();
-        } catch (IOException e){
+        } catch (IOException e) {
             e.printStackTrace();
             returnVal = 2;
         }
@@ -121,11 +124,11 @@ public class encrypt {
         return hash;
     }
 
-    private String generateName(){
+    private String generateName() {
         String name = "";
-        for (int n = 0; n < 25; n++){
-            int value = (int)(Math.random()* 26) + 97;
-            char letter = (char)value;
+        for (int n = 0; n < 25; n++) {
+            int value = (int) (Math.random() * 26) + 97;
+            char letter = (char) value;
             name += letter;
         }
         return name;
