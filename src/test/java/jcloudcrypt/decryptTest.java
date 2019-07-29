@@ -1,5 +1,6 @@
 package jcloudcrypt;
 
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -59,5 +60,75 @@ public class decryptTest {
             e.printStackTrace();
             assertTrue(false);
         }
+    }
+
+    @Test
+    public void passwordCheckMatch() {
+        File folder = null;
+        try {
+            folder = tempFolder.newFolder("folder");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        File file = new File(folder, "Test.txt");
+        String path = file.getAbsolutePath();
+        encrypt encryption = new encrypt();
+        FileOutputStream fileout = null;
+        try {
+            fileout = new FileOutputStream(file);
+            String text = new String("This is a test of the encryption method");
+            fileout.write(text.getBytes());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        try {
+            if (fileout != null)
+                fileout.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        // pass gets cleared in encryption step
+        char[] pass = new char[] { 't', 'e', 's', 't' };
+        encryption.encryptFile(pass, path, false);
+        File file2 = new File(path + ".jcc");
+        pass = new char[] { 't', 'e', 's', 't' };
+        decrypt decryption = new decrypt();
+        boolean result = decryption.checkKey(pass, file2.getPath());
+        assertTrue(result);
+    }
+
+    @Test
+    public void passwordCheckMismatch() {
+        File folder = null;
+        try {
+            folder = tempFolder.newFolder("folder");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        File file = new File(folder, "Test.txt");
+        String path = file.getAbsolutePath();
+        encrypt encryption = new encrypt();
+        FileOutputStream fileout = null;
+        try {
+            fileout = new FileOutputStream(file);
+            String text = new String("This is a test of the encryption method");
+            fileout.write(text.getBytes());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        try {
+            if (fileout != null)
+                fileout.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        // pass gets cleared in encryption step
+        char[] pass = new char[] { 't', 'e', 's', 't' };
+        encryption.encryptFile(pass, path, false);
+        File file2 = new File(path + ".jcc");
+        pass = new char[] { 'D', 'i', 'f', 'f' };
+        decrypt decryption = new decrypt();
+        boolean result = decryption.checkKey(pass, file2.getPath());
+        assertFalse(result);
     }
 }

@@ -40,7 +40,6 @@ public class encryptTest {
             e.printStackTrace();
         }
         File file = new File(folder, "Test.txt");
-        // String directory = file.getParent();
         String path = file.getAbsolutePath();
         encrypt encryption = new encrypt();
         FileOutputStream fileout = null;
