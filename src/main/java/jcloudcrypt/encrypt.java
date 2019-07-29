@@ -34,6 +34,7 @@ public class encrypt {
         CipherOutputStream cipherOut = null;
         FileOutputStream fileOut = null;
         File file = null;
+        obFlag = (obfuscateName) ? (byte) 1 : (byte) 0;
         if (password == null)
             return 5;
         ByteArray passBytes = toByteArray(password);
@@ -60,6 +61,9 @@ public class encrypt {
             fileOut = new FileOutputStream(outputPath);
             cipherOut = new CipherOutputStream(fileOut, cipher);
             fileInput = new FileInputStream(file);
+            if (obfuscateName) {
+                grabFileName(file);
+            }
         } catch (FileNotFoundException e) {
             // e.printStackTrace();
             return 2;

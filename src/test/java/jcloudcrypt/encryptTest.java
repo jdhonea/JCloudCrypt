@@ -58,7 +58,7 @@ public class encryptTest {
             e.printStackTrace();
         }
         char[] pass = new char[] { 't', 'e', 's', 't' };
-        encryption.encryptFile(pass, path, true);
+        encryption.encryptFile(pass, path, false);
         File file2 = new File(path + ".jcc");
         try {
             boolean compare = FileUtils.contentEquals(file, file2);
