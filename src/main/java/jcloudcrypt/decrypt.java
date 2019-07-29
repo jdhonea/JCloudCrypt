@@ -22,6 +22,7 @@ public class decrypt {
     private byte[] saltPlain = new byte[constants.SALTLEN];
     private byte[] saltPass = new byte[constants.SALTLEN];
     private byte[] plainHash = new byte[constants.HASHLEN];
+    private byte obFlag;
 
     public int decryptFile(char[] password, String filePath) {
         FileOutputStream fileOut = null;
@@ -49,15 +50,6 @@ public class decrypt {
         int writeReturn = writeToFile(fileInput, cipherOut);
         if (writeReturn != 0)
             return 3;
-        try {
-            if (fileInput != null)
-                fileInput.close();
-            if (cipherOut != null)
-                cipherOut.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-            return 4;
-        }
         return 0;
     }
 
@@ -103,6 +95,7 @@ public class decrypt {
         try {
             File inFile = new File(filePath);
             file = new FileInputStream(inFile);
+            obFlag = (byte) file.read();
             int count = file.read(iv);
             if (count > 0) {
                 count = file.read(saltPass);
@@ -147,9 +140,9 @@ public class decrypt {
 
     private int writeToFile(FileInputStream fileInput, CipherOutputStream cipherOut) {
         byte[] buffer = new byte[2048];
-        int count;
+        int count, returnVal = 0;
         // Gets rid of the prepend data.
-        int prepData = iv.length + saltPlain.length + saltPass.length + plainHash.length;
+        int prepData = iv.length + saltPlain.length + saltPass.length + plainHash.length + 1;
         try {
             count = fileInput.read(new byte[prepData]);
             while ((count = fileInput.read(buffer)) > 0) {
@@ -157,8 +150,17 @@ public class decrypt {
             }
         } catch (IOException e) {
             e.printStackTrace();
-            return 1;
+            returnVal = 1;
         }
-        return 0;
+        try {
+            if (fileInput != null)
+                fileInput.close();
+            if (cipherOut != null)
+                cipherOut.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+            returnVal = 2;
+        }
+        return returnVal;
     }
 }

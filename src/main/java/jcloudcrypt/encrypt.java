@@ -37,6 +37,7 @@ public class encrypt {
         obFlag = (obfuscateName) ? (byte) 1 : (byte) 0;
         if (password == null)
             return 5;
+        obFlag = (obfuscateName) ? (byte) 1 : (byte) 0;
         ByteArray passBytes = toByteArray(password);
         Arrays.fill(password, ' '); // clears out the plain text password
         SecureRandom secureRandom = new SecureRandom();
