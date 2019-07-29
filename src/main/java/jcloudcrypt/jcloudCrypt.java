@@ -3,6 +3,19 @@ package jcloudcrypt;
 //Filename limit is 260 chars in windows, 255 in most linux filesystems
 //Java 2 bytes per char
 
+// File Header:
+// 1. Obfuscate Filename flag - 1 byte
+// 2. If flag = 1 -> Length of file name - 2 bytes
+// 3. Initialization Vector - 16 bytes
+// 4. Password Salt - 32 bytes
+// 5. Password Hashed for verification - 32 bytes
+// 6. Hashed Password Salt - 32 bytes
+
+//If file name is obfuscated, length of filename is stored in header and then
+//first X bytes are stored in beginning of file data and encrypted.
+
+// TODO: Add drive space check
+// TODO: Add output path
 // TODO: Get test cases setup
 // TODO: Format code!
 // TODO: Get error messages setup for user.

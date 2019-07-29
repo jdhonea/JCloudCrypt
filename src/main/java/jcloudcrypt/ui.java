@@ -105,7 +105,7 @@ public class ui implements ActionListener {
         encryptButton.addActionListener(this);
         textFieldPane.add(encryptButton);
         obfuscateName = new JCheckBox("Obfuscate filename");
-        textFieldPane.add(obfuscateName);
+        // textFieldPane.add(obfuscateName);
         panel.add(textFieldPane);
     }
 
