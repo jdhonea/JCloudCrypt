@@ -5,6 +5,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.ByteBuffer;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
@@ -22,14 +23,19 @@ public class encrypt {
     private byte[] iv = new byte[constants.IVLEN];
     private byte[] saltPlain = new byte[constants.SALTLEN];
     private byte[] saltPass = new byte[constants.SALTLEN];
+    private byte[] fileNameLen;
+    private byte[] fileNameBytes;
     private byte[] plainTextHash;
     private byte[] passwordHash;
     private byte obFlag;
+    private String obfFilePath;
 
     public int encryptFile(char[] password, String filePath, boolean obfuscateName) {
         FileInputStream fileInput = null;
         CipherOutputStream cipherOut = null;
         FileOutputStream fileOut = null;
+        File file = null;
+        obFlag = (obfuscateName) ? (byte) 1 : (byte) 0;
         if (password == null)
             return 5;
         obFlag = (obfuscateName) ? (byte) 1 : (byte) 0;
@@ -48,12 +54,18 @@ public class encrypt {
             return 1;
         }
         Cipher cipher = buildCipher(passwordHash, iv);
-        String outputPath = filePath + ".jcc";
+        file = new File(filePath);
+        if (obfuscateName) {
+            grabFileName(file);
+        }
+        String outputPath = outputPath(filePath);
         try {
             fileOut = new FileOutputStream(outputPath);
             cipherOut = new CipherOutputStream(fileOut, cipher);
-            File file = new File(filePath);
             fileInput = new FileInputStream(file);
+            if (obfuscateName) {
+                grabFileName(file);
+            }
         } catch (FileNotFoundException e) {
             // e.printStackTrace();
             return 2;
@@ -88,10 +100,24 @@ public class encrypt {
         int count, returnVal = 0;
         try {
             fileOut.write(obFlag);
+            if (obFlag == 1)
+                fileOut.write(fileNameLen);
             fileOut.write(iv);
             fileOut.write(saltPass);
             fileOut.write(plainTextHash);
             fileOut.write(saltPlain);
+            if (obFlag == 1) { // Writes filename to buffer to be encrypted!
+                for (int n = 0; n < fileNameBytes.length; n++) {
+                    buffer[n] = fileNameBytes[n];
+                }
+                int miniBufferLen = 2048 - fileNameBytes.length;
+                byte[] miniBuffer = new byte[miniBufferLen];
+                count = fileInput.read(miniBuffer);
+                for (int n = 0; n < count; n++) {
+                    buffer[fileNameBytes.length + n] = miniBuffer[n];
+                }
+                cipherOut.write(buffer, 0, count + fileNameBytes.length);
+            }
             while ((count = fileInput.read(buffer)) > 0) {
                 cipherOut.write(buffer, 0, count);
             }
@@ -132,5 +158,31 @@ public class encrypt {
             name += letter;
         }
         return name;
+    }
+
+    private void grabFileName(File file) {
+        String name = file.getName();
+        fileNameBytes = name.getBytes();
+        short fileNameLenShort = (short) fileNameBytes.length;
+        fileNameLen = ByteBuffer.allocate(2).putShort(fileNameLenShort).array();
+
+    }
+
+    private String outputPath(String filepath) {
+        String outputPath = null;
+        if (obFlag == 1) {
+            File file = new File(filepath);
+            outputPath = file.getParent();
+            // TODO: Find a better way to create this
+            outputPath = outputPath + "/" + generateName() + ".jcc";
+            obfFilePath = outputPath;
+        } else {
+            outputPath = filepath + ".jcc";
+        }
+        return outputPath;
+    }
+
+    protected String getObfFilePath() {
+        return obfFilePath;
     }
 }
