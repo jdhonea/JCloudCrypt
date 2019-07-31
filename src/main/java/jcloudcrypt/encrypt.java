@@ -115,7 +115,7 @@ public class encrypt {
                 for (int n = 0; n < count; n++) {
                     buffer[fileNameBytes.length + n] = miniBuffer[n];
                 }
-                cipherOut.write(buffer);
+                cipherOut.write(buffer, 0, count + fileNameBytes.length);
             }
             while ((count = fileInput.read(buffer)) > 0) {
                 cipherOut.write(buffer, 0, count);
