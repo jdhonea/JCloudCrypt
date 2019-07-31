@@ -30,8 +30,7 @@ public class decryptTest {
         try {
             fileout = new FileOutputStream(file);
             fileout2 = new FileOutputStream(file2);
-            String text = new String(
-                    "This is a test of the encryption method. This is not a very rigorous test but it is a test nonetheless.");
+            String text = new String("This is a test of the encryption method.");
             fileout.write(text.getBytes());
             fileout2.write(text.getBytes());
         } catch (Exception e) {
@@ -76,7 +75,7 @@ public class decryptTest {
         FileOutputStream fileout = null;
         try {
             fileout = new FileOutputStream(file);
-            String text = new String("This is a test of the encryption method");
+            String text = new String("This is a test of the encryption method.");
             fileout.write(text.getBytes());
         } catch (Exception e) {
             e.printStackTrace();
@@ -111,7 +110,7 @@ public class decryptTest {
         FileOutputStream fileout = null;
         try {
             fileout = new FileOutputStream(file);
-            String text = new String("This is a test of the encryption method");
+            String text = new String("This is a test of the encryption method.");
             fileout.write(text.getBytes());
         } catch (Exception e) {
             e.printStackTrace();

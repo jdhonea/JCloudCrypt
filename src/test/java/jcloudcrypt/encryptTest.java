@@ -45,7 +45,7 @@ public class encryptTest {
         FileOutputStream fileout = null;
         try {
             fileout = new FileOutputStream(file);
-            String text = new String("This is a test of the encryption method");
+            String text = new String("This is a test of the encryption method.");
             fileout.write(text.getBytes());
         } catch (Exception e) {
             e.printStackTrace();

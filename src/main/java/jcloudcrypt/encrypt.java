@@ -139,7 +139,7 @@ public class encrypt {
         return returnVal;
     }
 
-    private byte[] passwordHash(ByteArray passBytes, byte[] salt) {
+    public byte[] passwordHash(ByteArray passBytes, byte[] salt) {
         byte[] hash = new byte[0];
         Hasher hasher = jargon2Hasher().type(Type.ARGON2id) // Data-dependent hashing
                 .memoryCost(constants.MEMORYCOST) // 128MB memory cost
