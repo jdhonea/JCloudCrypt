@@ -113,7 +113,7 @@ public class encrypt {
                 byte[] miniBuffer = new byte[miniBufferLen];
                 count = fileInput.read(miniBuffer);
                 for (int n = 0; n < count; n++) {
-                    buffer[fileNameLen.length + n] = miniBuffer[n];
+                    buffer[fileNameBytes.length + n] = miniBuffer[n];
                 }
                 cipherOut.write(buffer);
             }

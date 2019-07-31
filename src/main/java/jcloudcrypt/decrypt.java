@@ -13,6 +13,7 @@ import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 import javax.crypto.Cipher;
+import javax.crypto.CipherInputStream;
 import javax.crypto.CipherOutputStream;
 import javax.crypto.NoSuchPaddingException;
 import javax.crypto.spec.IvParameterSpec;
@@ -40,10 +41,12 @@ public class decrypt {
         Cipher cipher = buildCipher(passHash);
         if (obFlag == 1) {
             int writeReturn = obfWriteToFile(filePath, cipher);
+            if (writeReturn != 0)
+                return 3;
         } else {
             int writeReturn = normWriteToFile(filePath, cipher);
-        if (writeReturn != 0)
-            return 3;
+            if (writeReturn != 0)
+                return 3;
         }
         return 0;
     }
@@ -177,9 +180,51 @@ public class decrypt {
     }
 
     private int obfWriteToFile(String filePath, Cipher cipher) {
-        int returnVal = 0;
+        int returnVal = 0, count = 0;
+        int prepData = iv.length + saltPlain.length + saltPass.length + plainHash.length + 3;
+        byte[] buffer = new byte[2048];
         FileInputStream fileInput = null;
         FileOutputStream fileOutput = null;
+        CipherInputStream cipherIn = null;
+        File file = new File(filePath);
+        String filePathParent = file.getParent();
+        try {
+            fileInput = new FileInputStream(file);
+            cipherIn = new CipherInputStream(fileInput, cipher);
+            count = fileInput.read(new byte[prepData]);
+            if (count > 0) {
+                count = cipherIn.read(buffer);
+                byte[] fileNameBytes = new byte[fileNameLen];
+                byte[] miniBuffer = new byte[count - fileNameLen];
+                for (int n = 0; n < fileNameLen; n++) {
+                    fileNameBytes[n] = buffer[n];
+                }
+                for (int n = 0; n < miniBuffer.length; n++) {
+                    miniBuffer[n] = buffer[n + fileNameLen];
+                }
+                String newName = new String(fileNameBytes);
+                fileOutput = new FileOutputStream(filePathParent + "/" + newName);
+                fileOutput.write(miniBuffer, 0, miniBuffer.length);
+                while ((count = cipherIn.read(buffer)) > 0) {
+                    fileOutput.write(buffer, 0, count);
+                }
+            } else {
+                returnVal = 3;
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            returnVal = 1;
+        } catch (IOException e) {
+            e.printStackTrace();
+            returnVal = 2;
+        }
+        try {
+            if (cipherIn != null)
+                cipherIn.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+            returnVal = 4;
+        }
         return returnVal;
     }
 }
