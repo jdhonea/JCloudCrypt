@@ -221,6 +221,8 @@ public class decrypt {
         try {
             if (cipherIn != null)
                 cipherIn.close();
+            if (fileOutput != null)
+                fileOutput.close();
         } catch (IOException e) {
             e.printStackTrace();
             returnVal = 4;
