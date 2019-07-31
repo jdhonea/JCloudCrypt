@@ -28,6 +28,7 @@ public class encrypt {
     private byte[] plainTextHash;
     private byte[] passwordHash;
     private byte obFlag;
+    private String obfFilePath;
 
     public int encryptFile(char[] password, String filePath, boolean obfuscateName) {
         FileInputStream fileInput = null;
@@ -174,9 +175,14 @@ public class encrypt {
             outputPath = file.getParent();
             // TODO: Find a better way to create this
             outputPath = outputPath + "/" + generateName() + ".jcc";
+            obfFilePath = outputPath;
         } else {
             outputPath = filepath + ".jcc";
         }
         return outputPath;
+    }
+
+    protected String getObfFilePath() {
+        return obfFilePath;
     }
 }

@@ -60,4 +60,52 @@ public class decryptTest {
             assertTrue(false);
         }
     }
+
+    @Test
+    public void obfDecryptionTest() {
+        File folder = null;
+        try {
+            folder = tempFolder.newFolder("folder");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        File file = new File(folder, "Test.txt");
+        File file2 = new File(folder, "Test2.txt");
+        // String directory = file.getParent();
+        FileOutputStream fileout = null;
+        FileOutputStream fileout2 = null;
+        try {
+            fileout = new FileOutputStream(file);
+            fileout2 = new FileOutputStream(file2);
+            String text = new String("This is a test of the encryption method.");
+            fileout.write(text.getBytes());
+            fileout2.write(text.getBytes());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        try {
+            if (fileout != null)
+                fileout.close();
+            if (fileout2 != null)
+                fileout2.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        char[] pass = new char[] { 'T', 'e', 's', 't' }; // Get cleared by encryption
+        char[] pass2 = new char[] { 'T', 'e', 's', 't' };
+        String path = file.getAbsolutePath();
+        encrypt encryption = new encrypt();
+        encryption.encryptFile(pass, path, true);
+        file.delete();
+        path = encryption.getObfFilePath();
+        decrypt decryption = new decrypt();
+        decryption.decryptFile(pass2, path);
+        file = new File(folder, "Test.txt");
+        try {
+            assertTrue(FileUtils.contentEquals(file, file2));
+        } catch (IOException e) {
+            e.printStackTrace();
+            assertTrue(false);
+        }
+    }
 }
