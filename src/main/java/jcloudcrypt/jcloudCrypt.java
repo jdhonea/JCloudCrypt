@@ -14,11 +14,8 @@ package jcloudcrypt;
 //If file name is obfuscated, length of filename is stored in header and then
 //first X bytes are stored in beginning of file data and encrypted.
 
-<<<<<<< Updated upstream
 // TODO: Add drive space check
 // TODO: Add output path
-=======
->>>>>>> Stashed changes
 // TODO: Get test cases setup
 // TODO: Format code!
 // TODO: Get error messages setup for user.

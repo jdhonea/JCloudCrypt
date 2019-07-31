@@ -7,6 +7,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.ByteBuffer;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
@@ -23,6 +24,7 @@ public class decrypt {
     private byte[] saltPass = new byte[constants.SALTLEN];
     private byte[] plainHash = new byte[constants.HASHLEN];
     private byte obFlag;
+    private short fileNameLen;
 
     public int decryptFile(char[] password, String filePath) {
         FileOutputStream fileOut = null;
@@ -96,6 +98,11 @@ public class decrypt {
             File inFile = new File(filePath);
             file = new FileInputStream(inFile);
             obFlag = (byte) file.read();
+            if (obFlag == 1) {
+                byte[] shortBytes = new byte[2];
+                file.read(shortBytes);
+                fileNameLen = ByteBuffer.wrap(shortBytes).getShort();
+            }
             int count = file.read(iv);
             if (count > 0) {
                 count = file.read(saltPass);
