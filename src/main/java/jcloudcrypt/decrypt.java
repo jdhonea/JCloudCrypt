@@ -27,8 +27,7 @@ public class decrypt {
     private short fileNameLen;
 
     public int decryptFile(char[] password, String filePath) {
-        FileOutputStream fileOut = null;
-        FileInputStream fileInput = null;
+
         if (password == null)
             return 5;
         ByteArray passBytes = toByteArray(password);
@@ -39,19 +38,13 @@ public class decrypt {
         byte[] passHash = getPassHash(passBytes, saltPass);
         passBytes.clear();
         Cipher cipher = buildCipher(passHash);
-        String newFilePath = FilenameUtils.removeExtension(filePath);
-        try {
-            fileOut = new FileOutputStream(newFilePath);
-            File file = new File(filePath);
-            fileInput = new FileInputStream(file);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-            return 2;
-        }
-        CipherOutputStream cipherOut = new CipherOutputStream(fileOut, cipher);
-        int writeReturn = writeToFile(fileInput, cipherOut);
+        if (obFlag == 1) {
+            int writeReturn = obfWriteToFile(filePath, cipher);
+        } else {
+            int writeReturn = normWriteToFile(filePath, cipher);
         if (writeReturn != 0)
             return 3;
+        }
         return 0;
     }
 
@@ -145,9 +138,21 @@ public class decrypt {
         return hash;
     }
 
-    private int writeToFile(FileInputStream fileInput, CipherOutputStream cipherOut) {
-        byte[] buffer = new byte[2048];
+    private int normWriteToFile(String filePath, Cipher cipher) {
+        FileInputStream fileInput = null;
+        FileOutputStream fileOut = null;
         int count, returnVal = 0;
+        File file = new File(filePath);
+        try {
+            fileInput = new FileInputStream(file);
+            String newFilePath = FilenameUtils.removeExtension(filePath);
+            fileOut = new FileOutputStream(newFilePath);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            returnVal = 3;
+        }
+        CipherOutputStream cipherOut = new CipherOutputStream(fileOut, cipher);
+        byte[] buffer = new byte[2048];
         // Gets rid of the prepend data.
         int prepData = iv.length + saltPlain.length + saltPass.length + plainHash.length + 1;
         try {
@@ -168,6 +173,13 @@ public class decrypt {
             e.printStackTrace();
             returnVal = 2;
         }
+        return returnVal;
+    }
+
+    private int obfWriteToFile(String filePath, Cipher cipher) {
+        int returnVal = 0;
+        FileInputStream fileInput = null;
+        FileOutputStream fileOutput = null;
         return returnVal;
     }
 }
