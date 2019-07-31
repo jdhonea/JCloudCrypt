@@ -17,6 +17,7 @@ package jcloudcrypt;
 // TODO: Add drive space check
 // TODO: Add output path
 // TODO: Get test cases setup
+// TODO: Dial in default hash settings
 // TODO: Format code!
 // TODO: Get error messages setup for user.
 // TODO: Get a keys file setup
