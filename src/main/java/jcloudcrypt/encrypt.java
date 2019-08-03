@@ -30,6 +30,15 @@ public class encrypt {
     private byte obFlag;
     private String obfFilePath;
 
+    /**
+     * Driver for file encryption. Encrypts file in AES-256 with Argon2 password
+     * hashing.
+     * 
+     * @param password      password to encrypt the file with
+     * @param filePath      path to the file to be encrypted
+     * @param obfuscateName flag whether the filename should be encrypted or not
+     * @return returns completion status
+     */
     public int encryptFile(char[] password, String filePath, boolean obfuscateName) {
         FileInputStream fileInput = null;
         CipherOutputStream cipherOut = null;
@@ -76,6 +85,13 @@ public class encrypt {
         return 0;
     }
 
+    /**
+     * Builds the cipher for encryption
+     * 
+     * @param passwordHash hashed password used for cipher
+     * @param iv           initialization vector for AES in CBC mode
+     * @return returns built Cipher object
+     */
     private Cipher buildCipher(byte[] passwordHash, byte[] iv) {
         try {
             SecretKeySpec skey = new SecretKeySpec(passwordHash, "AES");
@@ -95,6 +111,16 @@ public class encrypt {
         return null;
     }
 
+    /**
+     * Reads file data and writes all header data and encrypted file data to the
+     * encrypted file. Closes all passed streams before returning.
+     * 
+     * @param fileOut   FileOutputStream for encrypted file to be written to. Writes
+     *                  header information to file.
+     * @param fileInput FileInputStream of file read from
+     * @param cipherOut CipherOutputStream for encrypted file to be written to.
+     * @return returns completion status
+     */
     private int writeToFile(FileOutputStream fileOut, FileInputStream fileInput, CipherOutputStream cipherOut) {
         byte[] buffer = new byte[2048];
         int count, returnVal = 0;
@@ -139,7 +165,15 @@ public class encrypt {
         return returnVal;
     }
 
-    public byte[] passwordHash(ByteArray passBytes, byte[] salt) {
+    /**
+     * Hashes user given password to be used for encryption. Hashes using Argon2
+     * hashing algorithm.
+     * 
+     * @param passBytes ByteArray object containing user password
+     * @param salt      randomly generated salt for hashing
+     * @return returns the hashed password
+     */
+    private byte[] passwordHash(ByteArray passBytes, byte[] salt) {
         byte[] hash = new byte[0];
         Hasher hasher = jargon2Hasher().type(Type.ARGON2id) // Data-dependent hashing
                 .memoryCost(constants.MEMORYCOST) // 128MB memory cost
@@ -150,6 +184,12 @@ public class encrypt {
         return hash;
     }
 
+    /**
+     * Generates a 25 character long random name for encryption using filename
+     * obfuscation.
+     * 
+     * @return random String
+     */
     private String generateName() {
         String name = "";
         for (int n = 0; n < 25; n++) {
@@ -160,6 +200,12 @@ public class encrypt {
         return name;
     }
 
+    /**
+     * Converts filename of the file to be encrypted to a byte array and sets the
+     * filename length.
+     * 
+     * @param file File object pointing to file
+     */
     private void grabFileName(File file) {
         String name = file.getName();
         fileNameBytes = name.getBytes();
@@ -168,12 +214,17 @@ public class encrypt {
 
     }
 
+    /**
+     * Sets the new output path for the encrypted file.
+     * 
+     * @param filepath path to the file for encryption
+     * @return new path for the encrypted file
+     */
     private String outputPath(String filepath) {
         String outputPath = null;
         if (obFlag == 1) {
             File file = new File(filepath);
             outputPath = file.getParent();
-            // TODO: Find a better way to create this
             outputPath = outputPath + "/" + generateName() + ".jcc";
             obfFilePath = outputPath;
         } else {
@@ -182,6 +233,11 @@ public class encrypt {
         return outputPath;
     }
 
+    /**
+     * Used for unit tests only.
+     * 
+     * @return path to file
+     */
     protected String getObfFilePath() {
         return obfFilePath;
     }
