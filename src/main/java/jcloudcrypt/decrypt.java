@@ -27,6 +27,14 @@ public class decrypt {
     private byte obFlag;
     private short fileNameLen;
 
+    /**
+     * Driver for file decryption. Checks password validity via hashed password
+     * stored in header of file.
+     * 
+     * @param password user-provided password
+     * @param filePath path to the file being decrypted
+     * @return returns completion status
+     */
     public int decryptFile(char[] password, String filePath) {
 
         if (password == null)
@@ -51,6 +59,13 @@ public class decrypt {
         return 0;
     }
 
+    /**
+     * Verifies user-provided password with hashed password stored in header.
+     * 
+     * @param key      password being verified
+     * @param filePath path to the file being decrypted
+     * @return returns true if key is verified, false if not.
+     */
     public boolean checkKey(char[] key, String filePath) {
         boolean matches = false;
         try (ByteArray keyBytes = toByteArray(key)) {
@@ -69,6 +84,13 @@ public class decrypt {
         return matches;
     }
 
+    /**
+     * Builds decryption Cipher using user's password and initialization vector
+     * stored in file header.
+     * 
+     * @param passHash user's hashed password
+     * @return returns decryption Cipher
+     */
     private Cipher buildCipher(byte[] passHash) {
         SecretKeySpec skey = new SecretKeySpec(passHash, "AES");
         IvParameterSpec ivspec = new IvParameterSpec(iv);
@@ -88,6 +110,12 @@ public class decrypt {
         return null;
     }
 
+    /**
+     * Grabs the header information from the file being decrypted.
+     * 
+     * @param filePath path to the file being decrypted
+     * @return returns completion status
+     */
     private int getPrependData(String filePath) {
         FileInputStream file = null;
         try {
@@ -126,21 +154,34 @@ public class decrypt {
         return 0;
     }
 
+    /**
+     * Generates the password hash from user provided password and the salt stored
+     * in the file header. Hashes using Argon2 hashing algorithm.
+     * 
+     * @param passBytes user password stored as a ByteArray
+     * @param salt      original salt used during file encryption
+     * @return returns the generated password hash
+     */
     private byte[] getPassHash(ByteArray passBytes, byte[] salt) {
         byte[] hash = new byte[0];
-        try {
-            Hasher hasher = jargon2Hasher().type(Type.ARGON2id) // Data-dependent hashing
-                    .memoryCost(constants.MEMORYCOST) // 128MB memory cost
-                    .timeCost(constants.TIMECOST) // 30 passes through memory
-                    .parallelism(constants.PARALLELISM) // use 4 lanes and 4 threads
-                    .hashLength(constants.HASHLEN); // 32 bytes output hash
-            hash = hasher.salt(salt).password(passBytes).rawHash();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        Hasher hasher = jargon2Hasher().type(Type.ARGON2id) // Data-dependent hashing
+                .memoryCost(constants.MEMORYCOST) // 128MB memory cost
+                .timeCost(constants.TIMECOST) // 30 passes through memory
+                .parallelism(constants.PARALLELISM) // use 4 lanes and 4 threads
+                .hashLength(constants.HASHLEN); // 32 bytes output hash
+        hash = hasher.salt(salt).password(passBytes).rawHash();
+
         return hash;
     }
 
+    /**
+     * Writes decrypted data to output file. Used when filename encryption is not
+     * used.
+     * 
+     * @param filePath Path to the file to be written to
+     * @param cipher   Decryption Cipher used for the decryption process
+     * @return returns completion status
+     */
     private int normWriteToFile(String filePath, Cipher cipher) {
         FileInputStream fileInput = null;
         FileOutputStream fileOut = null;
@@ -179,6 +220,13 @@ public class decrypt {
         return returnVal;
     }
 
+    /**
+     * Writes decrypted data to output file. Used when filename encryption is used.
+     * 
+     * @param filePath path to the file to be written to
+     * @param cipher   Decryption Cipher used for file decryption
+     * @return returns completion status
+     */
     private int obfWriteToFile(String filePath, Cipher cipher) {
         int returnVal = 0, count = 0;
         int prepData = iv.length + saltPlain.length + saltPass.length + plainHash.length + 3;

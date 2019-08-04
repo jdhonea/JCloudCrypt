@@ -178,4 +178,18 @@ public class decryptTest {
             assertTrue(false);
         }
     }
+
+    @Test
+    public void noPass() {
+        File folder = null;
+        try {
+            folder = tempFolder.newFolder("folder");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        File file = new File(folder, "Test.txt");
+        decrypt decryption = new decrypt();
+        int returnVal = decryption.decryptFile(null, file.getAbsolutePath());
+        assertTrue(returnVal == 5);
+    }
 }

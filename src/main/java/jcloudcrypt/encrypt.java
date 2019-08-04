@@ -86,7 +86,7 @@ public class encrypt {
     }
 
     /**
-     * Builds the cipher for encryption
+     * Builds the cipher for encryption.
      * 
      * @param passwordHash hashed password used for cipher
      * @param iv           initialization vector for AES in CBC mode
