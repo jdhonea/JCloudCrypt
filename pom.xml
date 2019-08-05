@@ -120,12 +120,12 @@
                 <goal>exec</goal>
               </goals>
               <configuration>
-                <mainClass>jcloudcrypt.jcloudCrypt</mainClass>
+                <mainClass>jcloudcrypt.JCloudCrypt</mainClass>
               </configuration>
             </execution>
           </executions>
           <configuration>
-            <mainClass>jcloudcrypt.jcloudCrypt</mainClass>
+            <mainClass>jcloudcrypt.JCloudCrypt</mainClass>
           </configuration>
         </plugin>
         <plugin>
