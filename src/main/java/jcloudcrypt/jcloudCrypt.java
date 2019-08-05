@@ -16,8 +16,11 @@ public class jcloudCrypt {
     public static int main(String[] args) {
 
         // New Window()
-        ui ui = new ui();
-        ui.mainWindow();
+        // ui ui = new ui();
+        // ui.mainWindow();
+
+        Arguments arguments = new Arguments(args);
+        arguments.printHelp();
 
         return 0;
     }
