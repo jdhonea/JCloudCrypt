@@ -238,7 +238,7 @@ public class Encrypt {
      * 
      * @return path to file
      */
-    protected String getObfFilePath() {
+    String getObfFilePath() {
         return obfFilePath;
     }
 }

@@ -26,13 +26,22 @@ public class JCloudCrypt {
             return 0;
         } else {
             returnVal = processCall(arguments);
+            System.out.println(returnVal);
             return returnVal;
         }
     }
 
     public static int processCall(Arguments arguments) {
         int returnVal = 0;
-
+        if (checkForConflicts(arguments)) {
+            return 2;
+        }
         return returnVal;
+    }
+
+    private static boolean checkForConflicts(Arguments arguments) {
+        if (arguments.hasOption("encrypt") && arguments.hasOption("decrypt"))
+            return true;
+        return false;
     }
 }
