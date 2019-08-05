@@ -1,6 +1,6 @@
 package jcloudcrypt;
 
-public class Constants {
+public class Variables {
     public static final int SALTLEN = 32; // Length of salts in bytes
     public static final int HASHLEN = 32; // Length of hash in bytes
     public static final int IVLEN = 16; // Length of Init. Vector in bytes

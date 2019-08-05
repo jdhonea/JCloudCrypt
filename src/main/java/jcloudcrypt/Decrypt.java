@@ -20,10 +20,10 @@ import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
 public class Decrypt {
-    private byte[] iv = new byte[Constants.IVLEN];
-    private byte[] saltPlain = new byte[Constants.SALTLEN];
-    private byte[] saltPass = new byte[Constants.SALTLEN];
-    private byte[] plainHash = new byte[Constants.HASHLEN];
+    private byte[] iv = new byte[Variables.IVLEN];
+    private byte[] saltPlain = new byte[Variables.SALTLEN];
+    private byte[] saltPass = new byte[Variables.SALTLEN];
+    private byte[] plainHash = new byte[Variables.HASHLEN];
     private byte obFlag;
     private short filenameLen;
 
@@ -78,9 +78,9 @@ public class Decrypt {
         boolean matches = false;
         try (ByteArray keyBytes = toByteArray(key).clearSource()) {
             Verifier verifier = jargon2Verifier().type(Type.ARGON2id) // Data-dependent hashing
-                    .memoryCost(Constants.MEMORYCOST) // 128MB memory cost
-                    .timeCost(Constants.TIMECOST) // 30 passes through memory
-                    .parallelism(Constants.PARALLELISM); // use 4 lanes and 4 threads
+                    .memoryCost(Variables.MEMORYCOST) // 128MB memory cost
+                    .timeCost(Variables.TIMECOST) // 30 passes through memory
+                    .parallelism(Variables.PARALLELISM); // use 4 lanes and 4 threads
             getPrependData(filePath);
 
             matches = verifier.hash(plainHash).salt(saltPlain).password(keyBytes).verifyRaw();
@@ -172,10 +172,10 @@ public class Decrypt {
     private byte[] getPassHash(ByteArray passBytes, byte[] salt) {
         byte[] hash = new byte[0];
         Hasher hasher = jargon2Hasher().type(Type.ARGON2id) // Data-dependent hashing
-                .memoryCost(Constants.MEMORYCOST) // 128MB memory cost
-                .timeCost(Constants.TIMECOST) // 30 passes through memory
-                .parallelism(Constants.PARALLELISM) // use 4 lanes and 4 threads
-                .hashLength(Constants.HASHLEN); // 32 bytes output hash
+                .memoryCost(Variables.MEMORYCOST) // 128MB memory cost
+                .timeCost(Variables.TIMECOST) // 30 passes through memory
+                .parallelism(Variables.PARALLELISM) // use 4 lanes and 4 threads
+                .hashLength(Variables.HASHLEN); // 32 bytes output hash
         hash = hasher.salt(salt).password(passBytes).rawHash();
 
         return hash;

@@ -5,6 +5,7 @@ package jcloudcrypt;
 
 // TODO: Get test cases setup
 // TODO: Format code!
+// TODO: Document code with comments for possible other devs
 // TODO: Get error messages setup for user.
 // TODO: Get a an encrypted keys file setup
 // TODO: UI needs to look nicer. Functional UI currently in place
@@ -14,14 +15,24 @@ package jcloudcrypt;
 
 public class JCloudCrypt {
     public static int main(String[] args) {
-
-        // New Window()
-        // ui ui = new ui();
-        // ui.mainWindow();
-
+        int returnVal = 0;
         Arguments arguments = new Arguments(args);
-        arguments.printHelp();
+        if (arguments.hasArgumentErrors()) {
+            System.out.println("Incorrect Useage.");
+            arguments.printHelp();
+            return 1;
+        } else if (args.length == 0 || arguments.hasOption("help")) {
+            arguments.printHelp();
+            return 0;
+        } else {
+            returnVal = processCall(arguments);
+            return returnVal;
+        }
+    }
 
-        return 0;
+    public static int processCall(Arguments arguments) {
+        int returnVal = 0;
+
+        return returnVal;
     }
 }

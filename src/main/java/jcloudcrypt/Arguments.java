@@ -11,16 +11,12 @@ import org.apache.commons.cli.ParseException;
 public class Arguments {
     private Options options;
     private CommandLine arguments;
+    private boolean parserError;
 
     public Arguments(String[] args) {
         options = new Options();
         buildOptions();
-        CommandLineParser parser = new DefaultParser();
-        try {
-            arguments = parser.parse(options, args);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+        parserError = parseArgs(args);
     }
 
     public void printHelp() {
@@ -30,6 +26,20 @@ public class Arguments {
 
     public boolean hasOption(String opt) {
         return arguments.hasOption(opt);
+    }
+
+    public boolean hasArgumentErrors() {
+        return parserError;
+    }
+
+    private boolean parseArgs(String[] args) {
+        CommandLineParser parser = new DefaultParser();
+        try {
+            arguments = parser.parse(options, args);
+            return false;
+        } catch (ParseException e) {
+            return true;
+        }
     }
 
     private void buildOptions() {
