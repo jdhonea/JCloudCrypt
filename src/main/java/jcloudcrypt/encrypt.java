@@ -26,7 +26,6 @@ public class encrypt {
     private byte[] filenameLen;
     private byte[] filenameBytes;
     private byte[] plainTextHash;
-    private byte[] passwordHash;
     private byte obFlag;
     private String obfFilePath;
 
@@ -44,25 +43,27 @@ public class encrypt {
         CipherOutputStream cipherOut = null;
         FileOutputStream fileOut = null;
         File file = null;
-        obFlag = (obfuscateName) ? (byte) 1 : (byte) 0;
         if (password == null)
             return 5;
         obFlag = (obfuscateName) ? (byte) 1 : (byte) 0;
-        ByteArray passBytes = toByteArray(password);
-        Arrays.fill(password, ' '); // clears out the plain text password
         SecureRandom secureRandom = new SecureRandom();
         secureRandom.nextBytes(iv);
         secureRandom.nextBytes(saltPlain);
         secureRandom.nextBytes(saltPass);
-        plainTextHash = passwordHash(passBytes, saltPlain);
-        passwordHash = passwordHash(passBytes, saltPass);
-        try {
+        Cipher cipher;
+        byte[] passwordHash = null;
+        try (ByteArray passBytes = toByteArray(password).clearSource()) {
+            plainTextHash = passwordHash(passBytes, saltPlain);
+            passwordHash = passwordHash(passBytes, saltPass);
+            cipher = buildCipher(passwordHash, iv);
             passBytes.close();
         } catch (Exception e) {
             e.printStackTrace();
             return 1;
+        } finally {
+            if (passwordHash != null)
+                Arrays.fill(passwordHash, (byte) 0); // clears out the password hash
         }
-        Cipher cipher = buildCipher(passwordHash, iv);
         file = new File(filePath);
         if (obfuscateName) {
             grabFilename(file);
