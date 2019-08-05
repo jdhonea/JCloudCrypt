@@ -47,11 +47,11 @@ public class decryptTest {
         char[] pass = new char[] { 'T', 'e', 's', 't' }; // Get cleared by encryption
         char[] pass2 = new char[] { 'T', 'e', 's', 't' };
         String path = file.getAbsolutePath();
-        encrypt encryption = new encrypt();
+        Encrypt encryption = new Encrypt();
         encryption.encryptFile(pass, path, false);
         file.delete();
         path = path + ".jcc";
-        decrypt decryption = new decrypt();
+        Decrypt decryption = new Decrypt();
         decryption.decryptFile(pass2, path);
         try {
             assertTrue(FileUtils.contentEquals(file, file2));
@@ -71,7 +71,7 @@ public class decryptTest {
         }
         File file = new File(folder, "Test.txt");
         String path = file.getAbsolutePath();
-        encrypt encryption = new encrypt();
+        Encrypt encryption = new Encrypt();
         FileOutputStream fileout = null;
         try {
             fileout = new FileOutputStream(file);
@@ -91,7 +91,7 @@ public class decryptTest {
         encryption.encryptFile(pass, path, false);
         File file2 = new File(path + ".jcc");
         pass = new char[] { 't', 'e', 's', 't' };
-        decrypt decryption = new decrypt();
+        Decrypt decryption = new Decrypt();
         boolean result = decryption.checkKey(pass, file2.getPath());
         assertTrue(result);
     }
@@ -106,7 +106,7 @@ public class decryptTest {
         }
         File file = new File(folder, "Test.txt");
         String path = file.getAbsolutePath();
-        encrypt encryption = new encrypt();
+        Encrypt encryption = new Encrypt();
         FileOutputStream fileout = null;
         try {
             fileout = new FileOutputStream(file);
@@ -126,7 +126,7 @@ public class decryptTest {
         encryption.encryptFile(pass, path, false);
         File file2 = new File(path + ".jcc");
         pass = new char[] { 'D', 'i', 'f', 'f' };
-        decrypt decryption = new decrypt();
+        Decrypt decryption = new Decrypt();
         boolean result = decryption.checkKey(pass, file2.getPath());
         assertFalse(result);
     }
@@ -164,11 +164,11 @@ public class decryptTest {
         char[] pass = new char[] { 'T', 'e', 's', 't' }; // Get cleared by encryption
         char[] pass2 = new char[] { 'T', 'e', 's', 't' };
         String path = file.getAbsolutePath();
-        encrypt encryption = new encrypt();
+        Encrypt encryption = new Encrypt();
         encryption.encryptFile(pass, path, true);
         file.delete();
         path = encryption.getObfFilePath();
-        decrypt decryption = new decrypt();
+        Decrypt decryption = new Decrypt();
         decryption.decryptFile(pass2, path);
         file = new File(folder, "Test.txt");
         try {
@@ -188,7 +188,7 @@ public class decryptTest {
             e.printStackTrace();
         }
         File file = new File(folder, "Test.txt");
-        decrypt decryption = new decrypt();
+        Decrypt decryption = new Decrypt();
         int returnVal = decryption.decryptFile(null, file.getAbsolutePath());
         assertTrue(returnVal == 5);
     }

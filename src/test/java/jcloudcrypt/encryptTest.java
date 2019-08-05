@@ -17,14 +17,14 @@ public class encryptTest {
     @Test
     public void fileNotFound() {
         char[] pass = new char[] { 'a' };
-        encrypt encryption = new encrypt();
+        Encrypt encryption = new Encrypt();
         int returnVal = encryption.encryptFile(pass, "", false);
         assertTrue(2 == returnVal);
     }
 
     @Test
     public void emptyPassword() {
-        encrypt encryption = new encrypt();
+        Encrypt encryption = new Encrypt();
         int returnVal = encryption.encryptFile(null, "unitTestFile", false);
         assertTrue(5 == returnVal);
     }
@@ -41,7 +41,7 @@ public class encryptTest {
         }
         File file = new File(folder, "Test.txt");
         String path = file.getAbsolutePath();
-        encrypt encryption = new encrypt();
+        Encrypt encryption = new Encrypt();
         FileOutputStream fileout = null;
         try {
             fileout = new FileOutputStream(file);
