@@ -25,7 +25,7 @@ public class decrypt {
     private byte[] saltPass = new byte[constants.SALTLEN];
     private byte[] plainHash = new byte[constants.HASHLEN];
     private byte obFlag;
-    private short fileNameLen;
+    private short filenameLen;
 
     /**
      * Driver for file decryption. Checks password validity via hashed password
@@ -125,7 +125,7 @@ public class decrypt {
             if (obFlag == 1) {
                 byte[] shortBytes = new byte[2];
                 file.read(shortBytes);
-                fileNameLen = ByteBuffer.wrap(shortBytes).getShort();
+                filenameLen = ByteBuffer.wrap(shortBytes).getShort();
             }
             int count = file.read(iv);
             if (count > 0) {
@@ -242,15 +242,15 @@ public class decrypt {
             count = fileInput.read(new byte[prepData]);
             if (count > 0) {
                 count = cipherIn.read(buffer);
-                byte[] fileNameBytes = new byte[fileNameLen];
-                byte[] miniBuffer = new byte[count - fileNameLen];
-                for (int n = 0; n < fileNameLen; n++) {
-                    fileNameBytes[n] = buffer[n];
+                byte[] filenameBytes = new byte[filenameLen];
+                byte[] miniBuffer = new byte[count - filenameLen];
+                for (int n = 0; n < filenameLen; n++) {
+                    filenameBytes[n] = buffer[n];
                 }
                 for (int n = 0; n < miniBuffer.length; n++) {
-                    miniBuffer[n] = buffer[n + fileNameLen];
+                    miniBuffer[n] = buffer[n + filenameLen];
                 }
-                String newName = new String(fileNameBytes);
+                String newName = new String(filenameBytes);
                 fileOutput = new FileOutputStream(filePathParent + "/" + newName);
                 fileOutput.write(miniBuffer, 0, miniBuffer.length);
                 while ((count = cipherIn.read(buffer)) > 0) {

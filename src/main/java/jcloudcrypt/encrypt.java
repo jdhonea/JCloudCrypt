@@ -23,8 +23,8 @@ public class encrypt {
     private byte[] iv = new byte[constants.IVLEN];
     private byte[] saltPlain = new byte[constants.SALTLEN];
     private byte[] saltPass = new byte[constants.SALTLEN];
-    private byte[] fileNameLen;
-    private byte[] fileNameBytes;
+    private byte[] filenameLen;
+    private byte[] filenameBytes;
     private byte[] plainTextHash;
     private byte[] passwordHash;
     private byte obFlag;
@@ -65,7 +65,7 @@ public class encrypt {
         Cipher cipher = buildCipher(passwordHash, iv);
         file = new File(filePath);
         if (obfuscateName) {
-            grabFileName(file);
+            grabFilename(file);
         }
         String outputPath = outputPath(filePath);
         try {
@@ -73,7 +73,7 @@ public class encrypt {
             cipherOut = new CipherOutputStream(fileOut, cipher);
             fileInput = new FileInputStream(file);
             if (obfuscateName) {
-                grabFileName(file);
+                grabFilename(file);
             }
         } catch (FileNotFoundException e) {
             // e.printStackTrace();
@@ -127,22 +127,22 @@ public class encrypt {
         try {
             fileOut.write(obFlag);
             if (obFlag == 1)
-                fileOut.write(fileNameLen);
+                fileOut.write(filenameLen);
             fileOut.write(iv);
             fileOut.write(saltPass);
             fileOut.write(plainTextHash);
             fileOut.write(saltPlain);
             if (obFlag == 1) { // Writes filename to buffer to be encrypted!
-                for (int n = 0; n < fileNameBytes.length; n++) {
-                    buffer[n] = fileNameBytes[n];
+                for (int n = 0; n < filenameBytes.length; n++) {
+                    buffer[n] = filenameBytes[n];
                 }
-                int miniBufferLen = 2048 - fileNameBytes.length;
+                int miniBufferLen = 2048 - filenameBytes.length;
                 byte[] miniBuffer = new byte[miniBufferLen];
                 count = fileInput.read(miniBuffer);
                 for (int n = 0; n < count; n++) {
-                    buffer[fileNameBytes.length + n] = miniBuffer[n];
+                    buffer[filenameBytes.length + n] = miniBuffer[n];
                 }
-                cipherOut.write(buffer, 0, count + fileNameBytes.length);
+                cipherOut.write(buffer, 0, count + filenameBytes.length);
             }
             while ((count = fileInput.read(buffer)) > 0) {
                 cipherOut.write(buffer, 0, count);
@@ -206,11 +206,11 @@ public class encrypt {
      * 
      * @param file File object pointing to file
      */
-    private void grabFileName(File file) {
+    private void grabFilename(File file) {
         String name = file.getName();
-        fileNameBytes = name.getBytes();
-        short fileNameLenShort = (short) fileNameBytes.length;
-        fileNameLen = ByteBuffer.allocate(2).putShort(fileNameLenShort).array();
+        filenameBytes = name.getBytes();
+        short filenameLenShort = (short) filenameBytes.length;
+        filenameLen = ByteBuffer.allocate(2).putShort(filenameLenShort).array();
 
     }
 

@@ -6,7 +6,7 @@ package jcloudcrypt;
 // TODO: Get test cases setup
 // TODO: Format code!
 // TODO: Get error messages setup for user.
-// TODO: Get a keys file setup
+// TODO: Get a an encrypted keys file setup
 // TODO: UI needs to look nicer. Functional UI currently in place
 // TODO: Implement an "Advanced" settings option - allow user to set hashing settings, etc.
 // TODO: Create a regexp for the password requirements - maybe
