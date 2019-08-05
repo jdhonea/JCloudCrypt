@@ -56,7 +56,6 @@ public class encrypt {
             plainTextHash = passwordHash(passBytes, saltPlain);
             passwordHash = passwordHash(passBytes, saltPass);
             cipher = buildCipher(passwordHash, iv);
-            passBytes.close();
         } catch (Exception e) {
             e.printStackTrace();
             return 1;

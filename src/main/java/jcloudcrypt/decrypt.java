@@ -39,14 +39,21 @@ public class decrypt {
 
         if (password == null)
             return 5;
-        ByteArray passBytes = toByteArray(password);
-        Arrays.fill(password, ' ');
         int prependReturn = getPrependData(filePath);
         if (prependReturn != 0)
             return 1;
-        byte[] passHash = getPassHash(passBytes, saltPass);
-        passBytes.clear();
-        Cipher cipher = buildCipher(passHash);
+        Cipher cipher;
+        byte[] passHash = null;
+        try (ByteArray passBytes = toByteArray(password).clearSource()) {
+            passHash = getPassHash(passBytes, saltPass);
+            cipher = buildCipher(passHash);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return 2;
+        } finally {
+            if (passHash != null)
+                Arrays.fill(passHash, (byte) 0); // clears out the password hash
+        }
         if (obFlag == 1) {
             int writeReturn = obfWriteToFile(filePath, cipher);
             if (writeReturn != 0)
@@ -56,6 +63,7 @@ public class decrypt {
             if (writeReturn != 0)
                 return 3;
         }
+        Arrays.fill(password, ' ');
         return 0;
     }
 
@@ -68,8 +76,7 @@ public class decrypt {
      */
     public boolean checkKey(char[] key, String filePath) {
         boolean matches = false;
-        try (ByteArray keyBytes = toByteArray(key)) {
-            Arrays.fill(key, ' ');
+        try (ByteArray keyBytes = toByteArray(key).clearSource()) {
             Verifier verifier = jargon2Verifier().type(Type.ARGON2id) // Data-dependent hashing
                     .memoryCost(constants.MEMORYCOST) // 128MB memory cost
                     .timeCost(constants.TIMECOST) // 30 passes through memory
