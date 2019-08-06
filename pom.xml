@@ -35,6 +35,12 @@
       <artifactId>commons-cli</artifactId>
       <version>1.4</version>
     </dependency>
+    <!-- https://mvnrepository.com/artifact/org.apache.commons/commons-lang3 -->
+    <dependency>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-lang3</artifactId>
+      <version>3.7</version>
+    </dependency>
     <dependency>
       <groupId>com.kosprov.jargon2</groupId>
       <artifactId>jargon2-api</artifactId>
