@@ -33,10 +33,12 @@ public class Encrypt {
      * Driver for file encryption. Encrypts file in AES-256 with Argon2 password
      * hashing.
      * 
-     * @param password      password to encrypt the file with
-     * @param filePath      path to the file to be encrypted
-     * @param obfuscateName flag whether the filename should be encrypted or not
-     * @return returns completion status
+     * @param password      char array containing user's password to encrypt the
+     *                      file with
+     * @param filePath      String path to the file to be encrypted
+     * @param obfuscateName boolean flag whether the filename should be encrypted or
+     *                      not
+     * @return completion status int
      */
     public int encryptFile(char[] password, String filePath, boolean obfuscateName) {
         FileInputStream fileInput = null;
@@ -81,16 +83,17 @@ public class Encrypt {
         }
         int writeReturn = writeToFile(fileOut, fileInput, cipherOut);
         if (writeReturn != 0) // Fails to write to file
-            return 3;
+            return writeReturn;
         return 0;
     }
 
     /**
      * Builds the cipher for encryption.
      * 
-     * @param passwordHash hashed password used for cipher
-     * @param iv           initialization vector for AES in CBC mode
-     * @return returns built Cipher object
+     * @param passwordHash byte array containing the hashed password used for cipher
+     * @param iv           byte array containing the initialization vector for AES
+     *                     in CBC mode
+     * @return built Cipher object
      */
     private Cipher buildCipher(byte[] passwordHash, byte[] iv) {
         try {
@@ -119,7 +122,7 @@ public class Encrypt {
      *                  header information to file.
      * @param fileInput FileInputStream of file read from
      * @param cipherOut CipherOutputStream for encrypted file to be written to.
-     * @return returns completion status
+     * @return completion status int
      */
     private int writeToFile(FileOutputStream fileOut, FileInputStream fileInput, CipherOutputStream cipherOut) {
         byte[] buffer = new byte[2048];
@@ -170,8 +173,9 @@ public class Encrypt {
      * hashing algorithm.
      * 
      * @param passBytes ByteArray object containing user password
-     * @param salt      randomly generated salt for hashing
-     * @return returns the hashed password
+     * @param salt      byte array containing the randomly generated salt for
+     *                  hashing
+     * @return hashed password as a byte array
      */
     private byte[] passwordHash(ByteArray passBytes, byte[] salt) {
         byte[] hash = new byte[0];
@@ -188,7 +192,7 @@ public class Encrypt {
      * Generates a 25 character long random name for encryption using filename
      * obfuscation.
      * 
-     * @return random String
+     * @return random filename String
      */
     private String generateName() {
         String name = "";
@@ -217,8 +221,8 @@ public class Encrypt {
     /**
      * Sets the new output path for the encrypted file.
      * 
-     * @param filepath path to the file for encryption
-     * @return new path for the encrypted file
+     * @param filepath String containing path to the file for encryption
+     * @return new path String for the encrypted file
      */
     private String outputPath(String filepath) {
         String outputPath = null;
@@ -236,7 +240,7 @@ public class Encrypt {
     /**
      * Used for unit tests only.
      * 
-     * @return path to file
+     * @return path to file String
      */
     String getObfFilePath() {
         return obfFilePath;
