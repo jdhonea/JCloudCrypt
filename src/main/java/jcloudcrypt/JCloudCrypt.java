@@ -18,24 +18,23 @@ import java.util.Arrays;
 // TODO: Strip out UI, spin-off JCloudCryptCLI and a GUI wrapper for it.
 
 public class JCloudCrypt {
-    public static int main(String[] args) {
-        int returnVal = 0;
+    public static void main(String[] args) {
+        int status = 0;
         Arguments arguments = new Arguments(args);
         if (arguments.hasArgumentErrors()) {
             System.out.println("Incorrect Useage.");
             arguments.printHelp();
-            return 1;
+            status = 1;
         } else if (args.length == 0 || arguments.hasOption("help")) {
             arguments.printHelp();
-            return 0;
+            status = 0;
         } else {
-            returnVal = processCall(arguments);
-            System.out.println(returnVal);
-            return returnVal;
+            status = processCall(arguments);
+            System.out.println(status);
         }
     }
 
-    public static int processCall(Arguments arguments) {
+    private static int processCall(Arguments arguments) {
         if (arguments.checkForConflicts()) {
             return 2;
         }
