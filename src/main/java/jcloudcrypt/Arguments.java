@@ -196,5 +196,7 @@ public class Arguments {
         options.addOption(timeCost);
         Option help = new Option("h", "help", false, "prints this message");
         options.addOption(help);
+        Option obfuscate = new Option("r", false, "Randomize filename");
+        options.addOption(obfuscate);
     }
 }

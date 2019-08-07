@@ -75,4 +75,53 @@ public class argumentsTest {
         Arguments arguments = new Arguments(args);
         assertTrue(arguments.checkOutOfParallelismBounds());
     }
+
+    @Test
+    public void checkParBelowBounds() {
+        String[] args = new String[] { "-p", "0" };
+        Arguments arguments = new Arguments(args);
+        assertTrue(arguments.checkOutOfParallelismBounds());
+    }
+
+    @Test
+    public void checkParNonNumeric() {
+        String[] args = new String[] { "-p", "test" };
+        Arguments arguments = new Arguments(args);
+        assertTrue(arguments.checkOutOfParallelismBounds());
+    }
+
+    @Test
+    public void checkParInBounds() {
+        String[] args = new String[] { "-p", "10" };
+        Arguments arguments = new Arguments(args);
+        assertFalse(arguments.checkOutOfParallelismBounds());
+    }
+
+    @Test
+    public void checkTimeInBounds() {
+        String[] args = new String[] { "-t", "10" };
+        Arguments arguments = new Arguments(args);
+        assertFalse(arguments.checkOutOfParallelismBounds());
+    }
+
+    @Test
+    public void checkTimeNonNumeric() {
+        String[] args = new String[] { "-t", "test" };
+        Arguments arguments = new Arguments(args);
+        assertTrue(arguments.checkOutOfTimeCostBounds());
+    }
+
+    @Test
+    public void checkTimeAboveBounds() {
+        String[] args = new String[] { "-t", "250" };
+        Arguments arguments = new Arguments(args);
+        assertTrue(arguments.checkOutOfTimeCostBounds());
+    }
+
+    @Test
+    public void checkTimeBelowBounds() {
+        String[] args = new String[] { "-t", "0" };
+        Arguments arguments = new Arguments(args);
+        assertTrue(arguments.checkOutOfTimeCostBounds());
+    }
 }
