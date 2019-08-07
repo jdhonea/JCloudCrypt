@@ -64,7 +64,10 @@ public class JCloudCrypt {
             int returnVal = 0;
             if (arguments.getSelection() == 'e') {
                 Encrypt encryption = new Encrypt();
-                returnVal = encryption.encryptFile(password, filePath, false);
+                if (arguments.hasOption("obfuscate"))
+                    returnVal = encryption.encryptFile(password, filePath, true);
+                else
+                    returnVal = encryption.encryptFile(password, filePath, false);
             } else if (arguments.getSelection() == 'd') {
                 Decrypt decryption = new Decrypt();
                 returnVal = decryption.decryptFile(password, filePath);
