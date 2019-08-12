@@ -36,7 +36,7 @@ public class Arguments {
      */
     public void printHelp() {
         HelpFormatter formatter = new HelpFormatter();
-        formatter.printHelp("JCloudCryptCLI", options);
+        formatter.printHelp("JCloudCrypt", options);
     }
 
     /**

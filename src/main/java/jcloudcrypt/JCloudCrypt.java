@@ -47,6 +47,10 @@ public class JCloudCrypt {
         if (arguments.checkOutOfTimeCostBounds()) {
             return 5;
         }
+        String filePath = arguments.getFilePath();
+        if (checkFileDoesNotExist(filePath)) {
+            return 6;
+        }
         arguments.fixVariables();
         Console console = System.console();
         boolean matches = false;
@@ -59,26 +63,22 @@ public class JCloudCrypt {
         }
         if (passwordVerify != null)
             Arrays.fill(passwordVerify, ' ');
-        String filePath = arguments.getFilePath();
-        if (checkFileExists(filePath)) {
-            int returnVal = 0;
-            if (arguments.getSelection() == 'e') {
-                Encrypt encryption = new Encrypt();
-                if (arguments.hasOption("obfuscate"))
-                    returnVal = encryption.encryptFile(password, filePath, true);
-                else
-                    returnVal = encryption.encryptFile(password, filePath, false);
-            } else if (arguments.getSelection() == 'd') {
-                Decrypt decryption = new Decrypt();
-                returnVal = decryption.decryptFile(password, filePath);
-            }
-            return returnVal;
-        } else
-            return 6;
+        int returnVal = 0;
+        if (arguments.getSelection() == 'e') {
+            Encrypt encryption = new Encrypt();
+            if (arguments.hasOption("obfuscate"))
+                returnVal = encryption.encryptFile(password, filePath, true);
+            else
+                returnVal = encryption.encryptFile(password, filePath, false);
+        } else if (arguments.getSelection() == 'd') {
+            Decrypt decryption = new Decrypt();
+            returnVal = decryption.decryptFile(password, filePath);
+        }
+        return returnVal;
     }
 
-    private static boolean checkFileExists(String filePath) {
+    private static boolean checkFileDoesNotExist(String filePath) {
         File file = new File(filePath);
-        return file.isFile();
+        return !file.isFile();
     }
 }

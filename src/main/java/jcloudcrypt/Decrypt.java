@@ -259,7 +259,7 @@ public class Decrypt {
                     miniBuffer[n] = buffer[n + filenameLen];
                 }
                 String newName = new String(filenameBytes);
-                fileOutput = new FileOutputStream(filePathParent + "/" + newName);
+                fileOutput = new FileOutputStream(filePathParent + File.separator + newName);
                 fileOutput.write(miniBuffer, 0, miniBuffer.length);
                 while ((count = cipherIn.read(buffer)) > 0) {
                     fileOutput.write(buffer, 0, count);
@@ -273,15 +273,16 @@ public class Decrypt {
         } catch (IOException e) {
             e.printStackTrace();
             returnVal = 2;
-        }
-        try {
-            if (cipherIn != null)
-                cipherIn.close();
-            if (fileOutput != null)
-                fileOutput.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-            returnVal = 4;
+        } finally {
+            try {
+                if (cipherIn != null)
+                    cipherIn.close();
+                if (fileOutput != null)
+                    fileOutput.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+                returnVal = 4;
+            }
         }
         return returnVal;
     }

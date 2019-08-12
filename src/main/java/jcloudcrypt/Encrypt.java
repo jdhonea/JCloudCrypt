@@ -229,7 +229,7 @@ public class Encrypt {
         if (obFlag == 1) {
             File file = new File(filepath);
             outputPath = file.getParent();
-            outputPath = outputPath + "/" + generateName() + ".jcc";
+            outputPath = outputPath + File.separator + generateName() + ".jcc";
             obfFilePath = outputPath;
         } else {
             outputPath = filepath + ".jcc";
