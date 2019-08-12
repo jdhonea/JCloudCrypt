@@ -72,17 +72,9 @@ public class decryptTest {
         File file = new File(folder, "Test.txt");
         String path = file.getAbsolutePath();
         Encrypt encryption = new Encrypt();
-        FileOutputStream fileout = null;
-        try {
-            fileout = new FileOutputStream(file);
+        try (FileOutputStream fileout = new FileOutputStream(file)) {
             String text = new String("This is a test of the encryption method.");
             fileout.write(text.getBytes());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        try {
-            if (fileout != null)
-                fileout.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -107,17 +99,9 @@ public class decryptTest {
         File file = new File(folder, "Test.txt");
         String path = file.getAbsolutePath();
         Encrypt encryption = new Encrypt();
-        FileOutputStream fileout = null;
-        try {
-            fileout = new FileOutputStream(file);
+        try (FileOutputStream fileout = new FileOutputStream(file)) {
             String text = new String("This is a test of the encryption method.");
             fileout.write(text.getBytes());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        try {
-            if (fileout != null)
-                fileout.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -152,14 +136,15 @@ public class decryptTest {
             fileout2.write(text.getBytes());
         } catch (Exception e) {
             e.printStackTrace();
-        }
-        try {
-            if (fileout != null)
-                fileout.close();
-            if (fileout2 != null)
-                fileout2.close();
-        } catch (IOException e) {
-            e.printStackTrace();
+        } finally {
+            try {
+                if (fileout != null)
+                    fileout.close();
+                if (fileout2 != null)
+                    fileout2.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
         char[] pass = new char[] { 'T', 'e', 's', 't' }; // Get cleared by encryption
         char[] pass2 = new char[] { 'T', 'e', 's', 't' };
