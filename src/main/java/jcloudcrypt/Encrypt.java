@@ -153,17 +153,18 @@ public class Encrypt {
         } catch (IOException e) {
             e.printStackTrace();
             returnVal = 1;
-        }
-        try {
-            if (fileInput != null)
-                fileInput.close();
-            if (cipherOut != null)
-                cipherOut.close();
-            if (fileOut != null)
-                fileOut.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-            returnVal = 2;
+        } finally {
+            try {
+                if (fileInput != null)
+                    fileInput.close();
+                if (cipherOut != null)
+                    cipherOut.close();
+                if (fileOut != null)
+                    fileOut.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+                returnVal = 2;
+            }
         }
         return returnVal;
     }

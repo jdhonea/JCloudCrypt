@@ -76,15 +76,13 @@ public class Decrypt {
      */
     public boolean checkKey(char[] key, String filePath) {
         boolean matches = false;
-        try (ByteArray keyBytes = toByteArray(key).clearSource()) {
+        try (ByteArray keyBytes = toByteArray(key)) {
+            getPrependData(filePath);
             Verifier verifier = jargon2Verifier().type(Type.ARGON2id) // Data-dependent hashing
                     .memoryCost(Variables.MEMORYCOST) // 128MB memory cost
                     .timeCost(Variables.TIMECOST) // 30 passes through memory
                     .parallelism(Variables.PARALLELISM); // use 4 lanes and 4 threads
-            getPrependData(filePath);
-
             matches = verifier.hash(plainHash).salt(saltPlain).password(keyBytes).verifyRaw();
-
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -150,13 +148,14 @@ public class Decrypt {
         } catch (IOException e) {
             e.printStackTrace();
             return 2;
-        }
-        try {
-            if (file != null)
-                file.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-            return 3;
+        } finally {
+            try {
+                if (file != null)
+                    file.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+                return 3;
+            }
         }
         return 0;
     }
@@ -215,15 +214,16 @@ public class Decrypt {
         } catch (IOException e) {
             e.printStackTrace();
             returnVal = 1;
-        }
-        try {
-            if (fileInput != null)
-                fileInput.close();
-            if (cipherOut != null)
-                cipherOut.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-            returnVal = 2;
+        } finally {
+            try {
+                if (fileInput != null)
+                    fileInput.close();
+                if (cipherOut != null)
+                    cipherOut.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+                returnVal = 2;
+            }
         }
         return returnVal;
     }
