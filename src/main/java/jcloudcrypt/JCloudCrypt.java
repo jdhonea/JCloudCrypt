@@ -1,7 +1,6 @@
 package jcloudcrypt;
 
 import java.io.Console;
-import java.io.File;
 import java.util.Arrays;
 
 //Filename limit is 260 chars in windows, 255 in most linux filesystems
