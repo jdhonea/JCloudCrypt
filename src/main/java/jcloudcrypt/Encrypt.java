@@ -20,13 +20,24 @@ import javax.crypto.spec.SecretKeySpec;
 
 public class Encrypt {
 
+    /** Initialization vector byte array for AES in CBC mode */
     private byte[] iv = new byte[Variables.IVLEN];
+    /** Salt byte array for password hash stored in file header */
     private byte[] saltPlain = new byte[Variables.SALTLEN];
+    /** Salt byte array for password hash used for encryption */
     private byte[] saltPass = new byte[Variables.SALTLEN];
+    /**
+     * Length of filename byte array to be stored in header, used during filename
+     * obfuscation
+     */
     private byte[] filenameLen;
+    /** Original filename byte array */
     private byte[] filenameBytes;
+    /** Password hash to be stored in file header */
     private byte[] plainTextHash;
+    /** Flag for filename obfuscation */
     private byte obFlag;
+    /** Obfuscated filepath including new filename. Mostly used for testing only. */
     private String obfFilePath;
 
     /**
@@ -41,12 +52,16 @@ public class Encrypt {
      * @return completion status int
      */
     public int encryptFile(char[] password, String filePath, boolean obfuscateName) {
+        if (password == null)
+            return 5;
+        if (!checkFileExists(filePath)) {
+            Arrays.fill(password, ' ');
+            return 2;
+        }
         FileInputStream fileInput = null;
         CipherOutputStream cipherOut = null;
         FileOutputStream fileOut = null;
         File file = null;
-        if (password == null)
-            return 5;
         obFlag = (obfuscateName) ? (byte) 1 : (byte) 0;
         SecureRandom secureRandom = new SecureRandom();
         secureRandom.nextBytes(iv);
@@ -153,17 +168,18 @@ public class Encrypt {
         } catch (IOException e) {
             e.printStackTrace();
             returnVal = 1;
-        }
-        try {
-            if (fileInput != null)
-                fileInput.close();
-            if (cipherOut != null)
-                cipherOut.close();
-            if (fileOut != null)
-                fileOut.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-            returnVal = 2;
+        } finally {
+            try {
+                if (fileInput != null)
+                    fileInput.close();
+                if (cipherOut != null)
+                    cipherOut.close();
+                if (fileOut != null)
+                    fileOut.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+                returnVal = 2;
+            }
         }
         return returnVal;
     }
@@ -216,6 +232,17 @@ public class Encrypt {
         short filenameLenShort = (short) filenameBytes.length;
         filenameLen = ByteBuffer.allocate(2).putShort(filenameLenShort).array();
 
+    }
+
+    /**
+     * Checks if the file of the given file path exists and is a file.
+     * 
+     * @param filePath String containing the file path
+     * @return returns true if file exists and is file
+     */
+    private boolean checkFileExists(String filePath) {
+        File file = new File(filePath);
+        return file.isFile();
     }
 
     /**

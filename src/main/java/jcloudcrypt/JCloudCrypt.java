@@ -1,14 +1,13 @@
 package jcloudcrypt;
 
 import java.io.Console;
-import java.io.File;
 import java.util.Arrays;
 
 //Filename limit is 260 chars in windows, 255 in most linux filesystems
 //Java 2 bytes per char
 
 // TODO: Get test cases setup
-// TODO: Strip out UI, spin-off JCloudCryptCLI and a GUI wrapper for it.
+// TODO: Strip out UI, spin-off JCloudCrypt CLI and a GUI wrapper for it.
 // TODO: Format code!
 // TODO: Get error messages setup for user.
 // TODO: Implement an "Advanced" settings option - allow user to set hashing settings, etc.
@@ -29,41 +28,29 @@ public class JCloudCrypt {
             arguments.printHelp();
             status = 0;
         } else {
-            status = processCall(arguments);
-            System.out.println(status);
+            status = arguments.runArgumentChecks(arguments);
+            arguments.fixVariables();
+            if (status == 0) {
+                char[] password = (arguments.getSelection() == 'e') ? readEncryptPassword()
+                        : readDecryptPassword(arguments.getFilePath());
+                if (password != null)
+                    status = objectFactory(arguments, password);
+            }
         }
     }
 
-    private static int processCall(Arguments arguments) {
-        if (arguments.checkForConflicts()) {
-            return 2;
-        }
-        if (arguments.checkOutOfMemBounds()) {
-            return 3;
-        }
-        if (arguments.checkOutOfParallelismBounds()) {
-            return 4;
-        }
-        if (arguments.checkOutOfTimeCostBounds()) {
-            return 5;
-        }
-        String filePath = arguments.getFilePath();
-        if (checkFileDoesNotExist(filePath)) {
-            return 6;
-        }
-        arguments.fixVariables();
-        Console console = System.console();
-        boolean matches = false;
-        char[] password = null;
-        char[] passwordVerify = null;
-        while (!matches) {
-            password = console.readPassword("Password: "); // Gets cleared in Encryption / Decryption method
-            passwordVerify = console.readPassword("Verify Password: ");
-            matches = Arrays.equals(password, passwordVerify);
-        }
-        if (passwordVerify != null)
-            Arrays.fill(passwordVerify, ' ');
+    /**
+     * Creates the encryption / decryption object and runs the encryption /
+     * decryption step.
+     * 
+     * @param arguments Arguments object containing parsed arguments
+     * @param password  char array containing user's password, gets cleared during
+     *                  encryption / decryption step
+     * @return error status
+     */
+    static int objectFactory(Arguments arguments, char[] password) {
         int returnVal = 0;
+        String filePath = arguments.getFilePath();
         if (arguments.getSelection() == 'e') {
             Encrypt encryption = new Encrypt();
             if (arguments.hasOption("obfuscate"))
@@ -77,8 +64,55 @@ public class JCloudCrypt {
         return returnVal;
     }
 
-    private static boolean checkFileDoesNotExist(String filePath) {
-        File file = new File(filePath);
-        return !file.isFile();
+    /**
+     * Reads password and password verifcation from user for file encryption.
+     * 
+     * @return user's password in a char array, null if not verified
+     */
+    static char[] readEncryptPassword() {
+        Console console = System.console();
+        char[] password = null;
+        char[] passwordVerify = null;
+        int count = 3;
+        while (count > 0) {
+            password = console.readPassword("Password: "); // Gets cleared in Encryption / Decryption method
+            passwordVerify = console.readPassword("Verify Password: ");
+            boolean matches = Arrays.equals(password, passwordVerify);
+            if (matches)
+                return password;
+            else
+                System.out.println("Passwords do not match.");
+            count--;
+        }
+        if (password != null)
+            Arrays.fill(password, ' ');
+        if (passwordVerify != null)
+            Arrays.fill(passwordVerify, ' ');
+        return null;
+    }
+
+    /**
+     * Reads user's password for file decryption and verifies it with password
+     * stored in file header.
+     * 
+     * @param filePath path to file to be decrypted
+     * @return user's password in char array if password is verified, null if not
+     *         verified
+     */
+    static char[] readDecryptPassword(String filePath) {
+        Console console = System.console();
+        char[] password = null;
+        int count = 3;
+        while (count > 0) {
+            password = console.readPassword("Password: ");
+            Decrypt decryption = new Decrypt();
+            boolean matches = decryption.checkKey(password, filePath);
+            if (matches)
+                return password;
+            else
+                System.out.println("Password is incorrect.");
+            count--;
+        }
+        return null;
     }
 }

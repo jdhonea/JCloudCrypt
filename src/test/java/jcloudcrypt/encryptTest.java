@@ -49,12 +49,13 @@ public class encryptTest {
             fileout.write(text.getBytes());
         } catch (Exception e) {
             e.printStackTrace();
-        }
-        try {
-            if (fileout != null)
-                fileout.close();
-        } catch (Exception e) {
-            e.printStackTrace();
+        } finally {
+            try {
+                if (fileout != null)
+                    fileout.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
         char[] pass = new char[] { 't', 'e', 's', 't' };
         encryption.encryptFile(pass, path, false);
