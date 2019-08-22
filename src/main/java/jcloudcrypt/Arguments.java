@@ -152,6 +152,12 @@ public class Arguments {
         return false;
     }
 
+    /**
+     * Check if file does not exist and if it does, it is not a directory.
+     * 
+     * @param filePath String path to file
+     * @return returns false if file exists
+     */
     public boolean checkFileDoesNotExist(String filePath) {
         File file = new File(filePath);
         return !file.isFile();
