@@ -29,38 +29,27 @@ public class JCloudCrypt {
             arguments.printHelp();
             status = 0;
         } else {
-            status = runArgumentChecks(arguments);
+            status = arguments.runArgumentChecks(arguments);
             arguments.fixVariables();
             if (status == 0) {
                 char[] password = (arguments.getSelection() == 'e') ? readEncryptPassword()
                         : readDecryptPassword(arguments.getFilePath());
                 if (password != null)
-                    status = processCall(arguments, password);
+                    status = objectFactory(arguments, password);
             }
         }
     }
 
-    static int runArgumentChecks(Arguments arguments) {
-        if (arguments.checkForConflicts()) {
-            return 2;
-        }
-        if (arguments.checkOutOfMemBounds()) {
-            return 3;
-        }
-        if (arguments.checkOutOfParallelismBounds()) {
-            return 4;
-        }
-        if (arguments.checkOutOfTimeCostBounds()) {
-            return 5;
-        }
-        String filePath = arguments.getFilePath();
-        if (checkFileDoesNotExist(filePath)) {
-            return 6;
-        }
-        return 0;
-    }
-
-    static int processCall(Arguments arguments, char[] password) {
+    /**
+     * Creates the encryption / decryption object and runs the encryption /
+     * decryption step.
+     * 
+     * @param arguments Arguments object containing parsed arguments
+     * @param password  char array containing user's password, gets cleared during
+     *                  encryption / decryption step
+     * @return error status
+     */
+    static int objectFactory(Arguments arguments, char[] password) {
         int returnVal = 0;
         String filePath = arguments.getFilePath();
         if (arguments.getSelection() == 'e') {
@@ -76,11 +65,11 @@ public class JCloudCrypt {
         return returnVal;
     }
 
-    private static boolean checkFileDoesNotExist(String filePath) {
-        File file = new File(filePath);
-        return !file.isFile();
-    }
-
+    /**
+     * Reads password and password verifcation from user for file encryption.
+     * 
+     * @return user's password in a char array, null if not verified
+     */
     static char[] readEncryptPassword() {
         Console console = System.console();
         char[] password = null;
@@ -103,6 +92,14 @@ public class JCloudCrypt {
         return null;
     }
 
+    /**
+     * Reads user's password for file decryption and verifies it with password
+     * stored in file header.
+     * 
+     * @param filePath path to file to be decrypted
+     * @return user's password in char array if password is verified, null if not
+     *         verified
+     */
     static char[] readDecryptPassword(String filePath) {
         Console console = System.console();
         char[] password = null;

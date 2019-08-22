@@ -1,5 +1,7 @@
 package jcloudcrypt;
 
+import java.io.File;
+
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.DefaultParser;
@@ -148,6 +150,31 @@ public class Arguments {
                 return true;
         }
         return false;
+    }
+
+    public boolean checkFileDoesNotExist(String filePath) {
+        File file = new File(filePath);
+        return !file.isFile();
+    }
+
+    public int runArgumentChecks(Arguments arguments) {
+        if (arguments.checkForConflicts()) {
+            return 2;
+        }
+        if (arguments.checkOutOfMemBounds()) {
+            return 3;
+        }
+        if (arguments.checkOutOfParallelismBounds()) {
+            return 4;
+        }
+        if (arguments.checkOutOfTimeCostBounds()) {
+            return 5;
+        }
+        String filePath = arguments.getFilePath();
+        if (checkFileDoesNotExist(filePath)) {
+            return 6;
+        }
+        return 0;
     }
 
     /**
