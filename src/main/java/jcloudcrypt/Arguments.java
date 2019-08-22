@@ -10,10 +10,15 @@ import org.apache.commons.cli.ParseException;
 import org.apache.commons.lang3.StringUtils;
 
 public class Arguments {
+    /** Encryption / Decryption flag. 'e' = encryption and 'd' = decryption */
     private char selection;
+    /** Path to file. */
     private String filePath;
+    /** Apache Commons CLI Options object */
     private Options options;
+    /** Apache Commons CLI CommandLine object */
     private CommandLine arguments;
+    /** Parse error flag */
     private boolean parserError;
 
     public Arguments(String[] args) {

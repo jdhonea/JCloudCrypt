@@ -20,13 +20,24 @@ import javax.crypto.spec.SecretKeySpec;
 
 public class Encrypt {
 
+    /** Initialization vector byte array for AES in CBC mode */
     private byte[] iv = new byte[Variables.IVLEN];
+    /** Salt byte array for password hash stored in file header */
     private byte[] saltPlain = new byte[Variables.SALTLEN];
+    /** Salt byte array for password hash used for encryption */
     private byte[] saltPass = new byte[Variables.SALTLEN];
+    /**
+     * Length of filename byte array to be stored in header, used during filename
+     * obfuscation
+     */
     private byte[] filenameLen;
+    /** Original filename byte array */
     private byte[] filenameBytes;
+    /** Password hash to be stored in file header */
     private byte[] plainTextHash;
+    /** Flag for filename obfuscation */
     private byte obFlag;
+    /** Obfuscated filepath including new filename. Mostly used for testing only. */
     private String obfFilePath;
 
     /**
