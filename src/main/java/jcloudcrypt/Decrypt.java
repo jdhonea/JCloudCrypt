@@ -44,7 +44,7 @@ public class Decrypt {
 
         if (password == null)
             return 5;
-        int prependReturn = getPrependData(filePath);
+        int prependReturn = getHeaderData(filePath);
         if (prependReturn != 0)
             return 1;
         Cipher cipher;
@@ -82,7 +82,7 @@ public class Decrypt {
     public boolean checkKey(char[] key, String filePath) {
         boolean matches = false;
         try (ByteArray keyBytes = toByteArray(key)) {
-            getPrependData(filePath);
+            getHeaderData(filePath);
             Verifier verifier = jargon2Verifier().type(Type.ARGON2id) // Data-dependent hashing
                     .memoryCost(Variables.MEMORYCOST) // 128MB memory cost
                     .timeCost(Variables.TIMECOST) // 30 passes through memory
@@ -126,7 +126,7 @@ public class Decrypt {
      * @param filePath String containing path to the file being decrypted
      * @return completion status int
      */
-    private int getPrependData(String filePath) {
+    private int getHeaderData(String filePath) {
         FileInputStream file = null;
         try {
             File inFile = new File(filePath);
