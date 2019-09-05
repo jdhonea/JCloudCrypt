@@ -7,14 +7,13 @@ import java.util.Arrays;
 //Java 2 bytes per char
 
 // TODO: Get test cases setup
-// TODO: Strip out UI, spin-off JCloudCrypt CLI and a GUI wrapper for it.
 // TODO: Format code!
+// TODO: Document code
 // TODO: Get error messages setup for user.
 // TODO: Implement an "Advanced" settings option - allow user to set hashing settings, etc.
-// TODO: Document code with comments for possible other devs
-// TODO: Create a regexp for the password requirements - maybe
-// TODO: Adjust Encrypt/Decrypt methods to allow user-set settings
-// TODO: Get a an encrypted keys file setup
+// TODO: Create a regexp for some basic password requirements
+// TODO: Get an encrypted keys file setup, will allow user to safely store keys for multiple files.
+// TODO: Create a GUI wrapper for the project.
 
 public class JCloudCrypt {
     public static void main(String[] args) {
