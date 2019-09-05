@@ -10,6 +10,7 @@ import java.util.Arrays;
 // TODO: Format code!
 // TODO: Document code
 // TODO: Get error messages setup for user.
+// TODO: Create a method to allow users to securely delete the original file.
 // TODO: Implement an "Advanced" settings option - allow user to set hashing settings, etc.
 // TODO: Create a regexp for some basic password requirements
 // TODO: Get an encrypted keys file setup, will allow user to safely store keys for multiple files.
