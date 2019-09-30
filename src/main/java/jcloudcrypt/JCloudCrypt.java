@@ -17,6 +17,10 @@ import java.util.Arrays;
 // TODO: Get a an encrypted keys file setup
 
 public class JCloudCrypt {
+    private static final int defaultMemoryCost = 65536;
+    private static final int defaultTimeCost = 10;
+    private static final int defaultParallelism = 4;
+
     public static void main(String[] args) {
         int status = 0;
         Arguments arguments = new Arguments(args);
@@ -49,14 +53,20 @@ public class JCloudCrypt {
      * @return error status
      */
     static int objectFactory(Arguments arguments, char[] password) {
-        int returnVal = 0;
+        int returnVal = 0, memCost = defaultMemoryCost, parallel = defaultParallelism, timeCost = defaultTimeCost;
         String filePath = arguments.getFilePath();
+        if (arguments.hasOption("memCost"))
+            memCost = Integer.parseInt(arguments.getOptionValue("memCost"));
+        if (arguments.hasOption("parallelism"))
+            parallel = Integer.parseInt(arguments.getOptionValue("parallelism"));
+        if (arguments.hasOption("timeCost"))
+            timeCost = Integer.parseInt(arguments.getOptionValue("timeCost"));
         if (arguments.getSelection() == 'e') {
             Encrypt encryption = new Encrypt();
             if (arguments.hasOption("obfuscate"))
-                returnVal = encryption.encryptFile(password, filePath, true);
+                returnVal = encryption.encryptFile(password, filePath, true, memCost, parallel, timeCost);
             else
-                returnVal = encryption.encryptFile(password, filePath, false);
+                returnVal = encryption.encryptFile(password, filePath, false, memCost, parallel, timeCost);
         } else if (arguments.getSelection() == 'd') {
             Decrypt decryption = new Decrypt();
             returnVal = decryption.decryptFile(password, filePath);

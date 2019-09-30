@@ -48,7 +48,54 @@ public class decryptTest {
         char[] pass2 = new char[] { 'T', 'e', 's', 't' };
         String path = file.getAbsolutePath();
         Encrypt encryption = new Encrypt();
-        encryption.encryptFile(pass, path, false);
+        encryption.encryptFile(pass, path, false, 65536, 4, 10);
+        file.delete();
+        path = path + ".jcc";
+        Decrypt decryption = new Decrypt();
+        decryption.decryptFile(pass2, path);
+        try {
+            assertTrue(FileUtils.contentEquals(file, file2));
+        } catch (IOException e) {
+            e.printStackTrace();
+            assertTrue(false);
+        }
+    }
+
+    @Test
+    public void decryptionTestMemCost() {
+        File folder = null;
+        try {
+            folder = tempFolder.newFolder("folder");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        File file = new File(folder, "Test.txt");
+        File file2 = new File(folder, "Test2.txt");
+        // String directory = file.getParent();
+        FileOutputStream fileout = null;
+        FileOutputStream fileout2 = null;
+        try {
+            fileout = new FileOutputStream(file);
+            fileout2 = new FileOutputStream(file2);
+            String text = new String("This is a test of the encryption method.");
+            fileout.write(text.getBytes());
+            fileout2.write(text.getBytes());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        try {
+            if (fileout != null)
+                fileout.close();
+            if (fileout2 != null)
+                fileout2.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        char[] pass = new char[] { 'T', 'e', 's', 't' }; // Get cleared by encryption
+        char[] pass2 = new char[] { 'T', 'e', 's', 't' };
+        String path = file.getAbsolutePath();
+        Encrypt encryption = new Encrypt();
+        encryption.encryptFile(pass, path, false, 84000, 4, 10);
         file.delete();
         path = path + ".jcc";
         Decrypt decryption = new Decrypt();
@@ -80,7 +127,7 @@ public class decryptTest {
         }
         // pass gets cleared in encryption step
         char[] pass = new char[] { 't', 'e', 's', 't' };
-        encryption.encryptFile(pass, path, false);
+        encryption.encryptFile(pass, path, false, 65536, 4, 10);
         File file2 = new File(path + ".jcc");
         pass = new char[] { 't', 'e', 's', 't' };
         Decrypt decryption = new Decrypt();
@@ -107,7 +154,7 @@ public class decryptTest {
         }
         // pass gets cleared in encryption step
         char[] pass = new char[] { 't', 'e', 's', 't' };
-        encryption.encryptFile(pass, path, false);
+        encryption.encryptFile(pass, path, false, 65536, 4, 10);
         File file2 = new File(path + ".jcc");
         pass = new char[] { 'D', 'i', 'f', 'f' };
         Decrypt decryption = new Decrypt();
@@ -150,7 +197,7 @@ public class decryptTest {
         char[] pass2 = new char[] { 'T', 'e', 's', 't' };
         String path = file.getAbsolutePath();
         Encrypt encryption = new Encrypt();
-        encryption.encryptFile(pass, path, true);
+        encryption.encryptFile(pass, path, true, 65536, 4, 10);
         file.delete();
         path = encryption.getObfFilePath();
         Decrypt decryption = new Decrypt();

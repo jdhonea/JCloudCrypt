@@ -28,6 +28,12 @@ public class Decrypt {
     private byte[] saltPass = new byte[Variables.SALTLEN];
     /** Unencrypted hashed password byte array for password verification */
     private byte[] plainHash = new byte[Variables.HASHLEN];
+    /** Memory Cost setting */
+    private int memoryCost;
+    /** Parallelism setting */
+    private int parallelism;
+    /** Time Cost setting */
+    private int timeCost;
     /** Flag for filename obfuscation option */
     private byte obFlag;
     /** Length of original filename. */
@@ -147,6 +153,21 @@ public class Decrypt {
             if (count > 0) {
                 count = file.read(saltPlain);
             }
+            if (count > 0) {
+                byte[] tempArray = new byte[Integer.SIZE / 8];
+                count = file.read(tempArray);
+                memoryCost = ByteBuffer.wrap(tempArray).getInt();
+            }
+            if (count > 0) {
+                byte[] tempArray = new byte[Integer.SIZE / 8];
+                count = file.read(tempArray);
+                parallelism = ByteBuffer.wrap(tempArray).getInt();
+            }
+            if (count > 0) {
+                byte[] tempArray = new byte[Integer.SIZE / 8];
+                count = file.read(tempArray);
+                timeCost = ByteBuffer.wrap(tempArray).getInt();
+            }
         } catch (FileNotFoundException e) {
             e.printStackTrace();
             return 1;
@@ -177,9 +198,9 @@ public class Decrypt {
     private byte[] getPassHash(ByteArray passBytes, byte[] salt) {
         byte[] hash = new byte[0];
         Hasher hasher = jargon2Hasher().type(Type.ARGON2id) // Data-dependent hashing
-                .memoryCost(Variables.MEMORYCOST) // 128MB memory cost
-                .timeCost(Variables.TIMECOST) // 30 passes through memory
-                .parallelism(Variables.PARALLELISM) // use 4 lanes and 4 threads
+                .memoryCost(memoryCost) // 128MB memory cost
+                .timeCost(timeCost) // 30 passes through memory
+                .parallelism(parallelism) // use 4 lanes and 4 threads
                 .hashLength(Variables.HASHLEN); // 32 bytes output hash
         hash = hasher.salt(salt).password(passBytes).rawHash();
 
@@ -210,7 +231,7 @@ public class Decrypt {
         CipherOutputStream cipherOut = new CipherOutputStream(fileOut, cipher);
         byte[] buffer = new byte[2048];
         // Gets rid of the prepend data.
-        int prepData = iv.length + saltPlain.length + saltPass.length + plainHash.length + 1;
+        int prepData = iv.length + saltPlain.length + saltPass.length + plainHash.length + 13;
         try {
             count = fileInput.read(new byte[prepData]);
             while ((count = fileInput.read(buffer)) > 0) {
@@ -242,7 +263,7 @@ public class Decrypt {
      */
     private int obfWriteToFile(String filePath, Cipher cipher) {
         int returnVal = 0, count = 0;
-        int prepData = iv.length + saltPlain.length + saltPass.length + plainHash.length + 3;
+        int prepData = iv.length + saltPlain.length + saltPass.length + plainHash.length + 15;
         byte[] buffer = new byte[2048];
         FileInputStream fileInput = null;
         FileOutputStream fileOutput = null;
