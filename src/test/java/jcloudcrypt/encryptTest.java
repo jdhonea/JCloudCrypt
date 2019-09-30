@@ -18,14 +18,14 @@ public class encryptTest {
     public void fileNotFound() {
         char[] pass = new char[] { 'a' };
         Encrypt encryption = new Encrypt();
-        int returnVal = encryption.encryptFile(pass, "", false);
+        int returnVal = encryption.encryptFile(pass, "", false, 65536, 4, 10);
         assertTrue(2 == returnVal);
     }
 
     @Test
     public void emptyPassword() {
         Encrypt encryption = new Encrypt();
-        int returnVal = encryption.encryptFile(null, "unitTestFile", false);
+        int returnVal = encryption.encryptFile(null, "unitTestFile", false, 65536, 4, 10);
         assertTrue(5 == returnVal);
     }
 
@@ -58,7 +58,7 @@ public class encryptTest {
             }
         }
         char[] pass = new char[] { 't', 'e', 's', 't' };
-        encryption.encryptFile(pass, path, false);
+        encryption.encryptFile(pass, path, false, 65536, 4, 10);
         File file2 = new File(path + ".jcc");
         try {
             boolean compare = FileUtils.contentEquals(file, file2);

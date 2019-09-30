@@ -3,20 +3,45 @@ package jcloudcrypt;
 import java.io.Console;
 import java.util.Arrays;
 
-//Filename limit is 260 chars in windows, 255 in most linux filesystems
-//Java 2 bytes per char
+/*
+File Header Layout:
+# of Bytes  -   Useage
+-----------------------
+1               Random Name Flag
+2*              Length of filename
+16              Initialization Vector
+32              Salt for Password
+32              2nd Hashing of password
+32              Salt for 2nd Hashed password
+4               Memory Cost
+4               Parallelism Value
+4               Time Cost
+
+*only present if Random Name Flag = 1
+*/
 
 // TODO: Get test cases setup
 // TODO: Format code!
 // TODO: Document code
 // TODO: Get error messages setup for user.
+<<<<<<< HEAD
 // TODO: Create a method to allow users to securely delete the original file.
 // TODO: Implement an "Advanced" settings option - allow user to set hashing settings, etc.
 // TODO: Create a regexp for some basic password requirements
 // TODO: Get an encrypted keys file setup, will allow user to safely store keys for multiple files.
 // TODO: Create a GUI wrapper for the project.
+=======
+// TODO: Document code with comments for possible other devs
+// TODO: Create a regexp for the password requirements - maybe
+// TODO: Adjust Encrypt/Decrypt methods to allow user-set settings
+// TODO: Get a an encrypted keys file setup
+>>>>>>> hashSettings
 
 public class JCloudCrypt {
+    private static final int defaultMemoryCost = 65536;
+    private static final int defaultTimeCost = 10;
+    private static final int defaultParallelism = 4;
+
     public static void main(String[] args) {
         int status = 0;
         Arguments arguments = new Arguments(args);
@@ -29,7 +54,7 @@ public class JCloudCrypt {
             status = 0;
         } else {
             status = arguments.runArgumentChecks(arguments);
-            arguments.fixVariables();
+            // arguments.fixVariables();
             if (status == 0) {
                 char[] password = (arguments.getSelection() == 'e') ? readEncryptPassword()
                         : readDecryptPassword(arguments.getFilePath());
@@ -49,14 +74,20 @@ public class JCloudCrypt {
      * @return error status
      */
     static int objectFactory(Arguments arguments, char[] password) {
-        int returnVal = 0;
+        int returnVal = 0, memCost = defaultMemoryCost, parallel = defaultParallelism, timeCost = defaultTimeCost;
         String filePath = arguments.getFilePath();
+        if (arguments.hasOption("memCost"))
+            memCost = Integer.parseInt(arguments.getOptionValue("memCost"));
+        if (arguments.hasOption("parallelism"))
+            parallel = Integer.parseInt(arguments.getOptionValue("parallelism"));
+        if (arguments.hasOption("timeCost"))
+            timeCost = Integer.parseInt(arguments.getOptionValue("timeCost"));
         if (arguments.getSelection() == 'e') {
             Encrypt encryption = new Encrypt();
             if (arguments.hasOption("obfuscate"))
-                returnVal = encryption.encryptFile(password, filePath, true);
+                returnVal = encryption.encryptFile(password, filePath, true, memCost, parallel, timeCost);
             else
-                returnVal = encryption.encryptFile(password, filePath, false);
+                returnVal = encryption.encryptFile(password, filePath, false, memCost, parallel, timeCost);
         } else if (arguments.getSelection() == 'd') {
             Decrypt decryption = new Decrypt();
             returnVal = decryption.decryptFile(password, filePath);

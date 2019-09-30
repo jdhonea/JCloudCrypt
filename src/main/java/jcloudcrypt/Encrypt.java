@@ -35,6 +35,12 @@ public class Encrypt {
     private byte[] filenameBytes;
     /** Password hash to be stored in file header */
     private byte[] plainTextHash;
+    /** Memory Cost used to hash password */
+    private byte[] memCostArray;
+    /** Parallelism setting used to hash password */
+    private byte[] parArray;
+    /** Time Cost setting used to hash password */
+    private byte[] timeCostArray;
     /** Flag for filename obfuscation */
     private byte obFlag;
     /** Obfuscated filepath including new filename. Mostly used for testing only. */
@@ -49,9 +55,15 @@ public class Encrypt {
      * @param filePath      String path to the file to be encrypted
      * @param obfuscateName boolean flag whether the filename should be encrypted or
      *                      not
+     * @param memoryCost    int memory cost assosciated with the hashing algorithm
+     *                      in KB
+     * @param parallelism   int number of lanes and threads used for hashing
+     * @param timeCost      int number of passes through memory for the hashing
+     *                      algorithm
      * @return completion status int
      */
-    public int encryptFile(char[] password, String filePath, boolean obfuscateName) {
+    public int encryptFile(char[] password, String filePath, boolean obfuscateName, int memoryCost, int parallelism,
+            int timeCost) {
         if (password == null)
             return 5;
         if (!checkFileExists(filePath)) {
@@ -70,8 +82,8 @@ public class Encrypt {
         Cipher cipher;
         byte[] passwordHash = null;
         try (ByteArray passBytes = toByteArray(password).clearSource()) {
-            plainTextHash = passwordHash(passBytes, saltPlain);
-            passwordHash = passwordHash(passBytes, saltPass);
+            plainTextHash = passwordHash(passBytes, saltPlain, memoryCost, parallelism, timeCost);
+            passwordHash = passwordHash(passBytes, saltPass, memoryCost, parallelism, timeCost);
             cipher = buildCipher(passwordHash, iv);
         } catch (Exception e) {
             e.printStackTrace();
@@ -80,6 +92,7 @@ public class Encrypt {
             if (passwordHash != null)
                 Arrays.fill(passwordHash, (byte) 0); // clears out the password hash
         }
+        buildSettingArrays(memoryCost, parallelism, timeCost);
         file = new File(filePath);
         if (obfuscateName) {
             grabFilename(file);
@@ -150,6 +163,9 @@ public class Encrypt {
             fileOut.write(saltPass);
             fileOut.write(plainTextHash);
             fileOut.write(saltPlain);
+            fileOut.write(memCostArray);
+            fileOut.write(parArray);
+            fileOut.write(timeCostArray);
             if (obFlag == 1) { // Writes filename to buffer to be encrypted!
                 for (int n = 0; n < filenameBytes.length; n++) {
                     buffer[n] = filenameBytes[n];
@@ -188,17 +204,20 @@ public class Encrypt {
      * Hashes user given password to be used for encryption. Hashes using Argon2
      * hashing algorithm.
      * 
-     * @param passBytes ByteArray object containing user password
-     * @param salt      byte array containing the randomly generated salt for
-     *                  hashing
+     * @param passBytes   ByteArray object containing user password
+     * @param salt        byte array containing the randomly generated salt for
+     *                    hashing
+     * @param memoryCost  int memory cost value set by user
+     * @param parralelism int parallelism value set by user
+     * @param timeCost    int time cost value set by user
      * @return hashed password as a byte array
      */
-    private byte[] passwordHash(ByteArray passBytes, byte[] salt) {
+    private byte[] passwordHash(ByteArray passBytes, byte[] salt, int memoryCost, int parallelism, int timeCost) {
         byte[] hash = new byte[0];
         Hasher hasher = jargon2Hasher().type(Type.ARGON2id) // Data-dependent hashing
-                .memoryCost(Variables.MEMORYCOST) // 128MB memory cost
-                .timeCost(Variables.TIMECOST) // 30 passes through memory
-                .parallelism(Variables.PARALLELISM) // use 4 lanes and 4 threads
+                .memoryCost(memoryCost) // 128MB memory cost
+                .timeCost(timeCost) // 30 passes through memory
+                .parallelism(parallelism) // use 4 lanes and 4 threads
                 .hashLength(Variables.HASHLEN); // 32 bytes output hash
         hash = hasher.salt(salt).password(passBytes).rawHash();
         return hash;
@@ -262,6 +281,19 @@ public class Encrypt {
             outputPath = filepath + ".jcc";
         }
         return outputPath;
+    }
+
+    /**
+     * Builds the hashing settings arrays to be stored in the file header
+     * 
+     * @param memCost     Memory Cost setting int
+     * @param parallelism Parallelism setting int
+     * @param timeCost    Time Cost setting int
+     */
+    private void buildSettingArrays(int memCost, int parallelism, int timeCost) {
+        memCostArray = ByteBuffer.allocate(4).putInt(memCost).array();
+        parArray = ByteBuffer.allocate(4).putInt(parallelism).array();
+        timeCostArray = ByteBuffer.allocate(4).putInt(timeCost).array();
     }
 
     /**

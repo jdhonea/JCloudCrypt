@@ -57,6 +57,17 @@ public class Arguments {
     }
 
     /**
+     * Returns the value assigned to this option.
+     * 
+     * @param opt Option name
+     * @return returns the String value of the option if it was set, otherwise
+     *         returns null
+     */
+    public String getOptionValue(String opt) {
+        return arguments.getOptionValue(opt);
+    }
+
+    /**
      * Checks if there is an error present in parsing arguments.
      * 
      * @return true if an error is present in arguments
@@ -181,18 +192,6 @@ public class Arguments {
             return 6;
         }
         return 0;
-    }
-
-    /**
-     * Sets the hashing variables requested by the user.
-     */
-    public void fixVariables() {
-        if (arguments.hasOption("memCost"))
-            Variables.MEMORYCOST = Integer.parseInt(arguments.getOptionValue("memCost")) * 1024;
-        if (arguments.hasOption("parallelism"))
-            Variables.MEMORYCOST = Integer.parseInt(arguments.getOptionValue("parallelism"));
-        if (arguments.hasOption("timeCost"))
-            Variables.MEMORYCOST = Integer.parseInt(arguments.getOptionValue("timeCost"));
     }
 
     /**
