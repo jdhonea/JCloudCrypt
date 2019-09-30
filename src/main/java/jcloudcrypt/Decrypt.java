@@ -90,9 +90,9 @@ public class Decrypt {
         try (ByteArray keyBytes = toByteArray(key)) {
             getHeaderData(filePath);
             Verifier verifier = jargon2Verifier().type(Type.ARGON2id) // Data-dependent hashing
-                    .memoryCost(Variables.MEMORYCOST) // 128MB memory cost
-                    .timeCost(Variables.TIMECOST) // 30 passes through memory
-                    .parallelism(Variables.PARALLELISM); // use 4 lanes and 4 threads
+                    .memoryCost(memoryCost) // 128MB memory cost
+                    .timeCost(timeCost) // 30 passes through memory
+                    .parallelism(parallelism); // use 4 lanes and 4 threads
             matches = verifier.hash(plainHash).salt(saltPlain).password(keyBytes).verifyRaw();
         } catch (Exception e) {
             e.printStackTrace();

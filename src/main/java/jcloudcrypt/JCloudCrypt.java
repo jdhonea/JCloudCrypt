@@ -44,12 +44,13 @@ public class JCloudCrypt {
             status = 0;
         } else {
             status = arguments.runArgumentChecks(arguments);
-            // arguments.fixVariables();
             if (status == 0) {
                 char[] password = (arguments.getSelection() == 'e') ? readEncryptPassword()
                         : readDecryptPassword(arguments.getFilePath());
                 if (password != null)
                     status = objectFactory(arguments, password);
+            } else {
+                System.out.println("Error: Conditions out of bounds!");
             }
         }
     }
