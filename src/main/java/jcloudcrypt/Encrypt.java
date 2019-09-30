@@ -204,9 +204,12 @@ public class Encrypt {
      * Hashes user given password to be used for encryption. Hashes using Argon2
      * hashing algorithm.
      * 
-     * @param passBytes ByteArray object containing user password
-     * @param salt      byte array containing the randomly generated salt for
-     *                  hashing
+     * @param passBytes   ByteArray object containing user password
+     * @param salt        byte array containing the randomly generated salt for
+     *                    hashing
+     * @param memoryCost  int memory cost value set by user
+     * @param parralelism int parallelism value set by user
+     * @param timeCost    int time cost value set by user
      * @return hashed password as a byte array
      */
     private byte[] passwordHash(ByteArray passBytes, byte[] salt, int memoryCost, int parallelism, int timeCost) {

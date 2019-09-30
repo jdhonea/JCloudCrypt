@@ -195,18 +195,6 @@ public class Arguments {
     }
 
     /**
-     * Sets the hashing variables requested by the user.
-     */
-    public void fixVariables() {
-        if (arguments.hasOption("memCost"))
-            Variables.MEMORYCOST = Integer.parseInt(arguments.getOptionValue("memCost")) * 1024;
-        if (arguments.hasOption("parallelism"))
-            Variables.MEMORYCOST = Integer.parseInt(arguments.getOptionValue("parallelism"));
-        if (arguments.hasOption("timeCost"))
-            Variables.MEMORYCOST = Integer.parseInt(arguments.getOptionValue("timeCost"));
-    }
-
-    /**
      * Parses the arguments set by the user.
      * 
      * @param args String array containing the program arguments

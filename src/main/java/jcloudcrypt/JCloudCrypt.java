@@ -3,14 +3,27 @@ package jcloudcrypt;
 import java.io.Console;
 import java.util.Arrays;
 
-//Filename limit is 260 chars in windows, 255 in most linux filesystems
-//Java 2 bytes per char
+/*
+File Header Layout:
+# of Bytes  -   Useage
+-----------------------
+1               Random Name Flag
+2*              Length of filename
+16              Initialization Vector
+32              Salt for Password
+32              2nd Hashing of password
+32              Salt for 2nd Hashed password
+4               Memory Cost
+4               Parallelism Value
+4               Time Cost
+
+*only present if Random Name Flag = 1
+*/
 
 // TODO: Get test cases setup
 // TODO: Strip out UI, spin-off JCloudCrypt CLI and a GUI wrapper for it.
 // TODO: Format code!
 // TODO: Get error messages setup for user.
-// TODO: Implement an "Advanced" settings option - allow user to set hashing settings, etc.
 // TODO: Document code with comments for possible other devs
 // TODO: Create a regexp for the password requirements - maybe
 // TODO: Adjust Encrypt/Decrypt methods to allow user-set settings
@@ -33,7 +46,7 @@ public class JCloudCrypt {
             status = 0;
         } else {
             status = arguments.runArgumentChecks(arguments);
-            arguments.fixVariables();
+            // arguments.fixVariables();
             if (status == 0) {
                 char[] password = (arguments.getSelection() == 'e') ? readEncryptPassword()
                         : readDecryptPassword(arguments.getFilePath());
