@@ -20,22 +20,12 @@ File Header Layout:
 *only present if Random Name Flag = 1
 */
 
-// TODO: Get test cases setup
-// TODO: Format code!
-// TODO: Document code
+// TODO: Get in-depth test cases setup
 // TODO: Get error messages setup for user.
-<<<<<<< HEAD
 // TODO: Create a method to allow users to securely delete the original file.
-// TODO: Implement an "Advanced" settings option - allow user to set hashing settings, etc.
 // TODO: Create a regexp for some basic password requirements
 // TODO: Get an encrypted keys file setup, will allow user to safely store keys for multiple files.
 // TODO: Create a GUI wrapper for the project.
-=======
-// TODO: Document code with comments for possible other devs
-// TODO: Create a regexp for the password requirements - maybe
-// TODO: Adjust Encrypt/Decrypt methods to allow user-set settings
-// TODO: Get a an encrypted keys file setup
->>>>>>> hashSettings
 
 public class JCloudCrypt {
     private static final int defaultMemoryCost = 65536;
