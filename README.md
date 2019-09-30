@@ -6,6 +6,15 @@
 
 Designed with user privacy in mind, JCloudCrypt is a simple, portable command-line utility to encrypt files. Created especially for users using cloud storage services such as Drive, Dropbox, and OneDrive, JCloudCrypt can also be used to secure sensitive data locally. JCloudCrypt encrypts your files using AES-256 and Argon2 password hashing algorithm.
 
+## Installation:
+
+### Linux:
+
+Mark JCloudCrypt as executable  
+`chmod +x JCloudCrypt`  
+and then move to /usr/bin  
+`sudo mv JCloudCrypt /usr/bin`
+
 ## Usage:
 
 usage: JCloudCrypt [OPTION] -e \<FILE>  
