@@ -75,7 +75,7 @@ public class JCloudCrypt {
             timeCost = Integer.parseInt(arguments.getOptionValue("timeCost"));
         if (arguments.getSelection() == 'e') {
             Encrypt encryption = new Encrypt();
-            if (arguments.hasOption("obfuscate"))
+            if (arguments.hasOption("r"))
                 returnVal = encryption.encryptFile(password, filePath, true, memCost, parallel, timeCost);
             else
                 returnVal = encryption.encryptFile(password, filePath, false, memCost, parallel, timeCost);
