@@ -32,7 +32,7 @@ public class Arguments {
                 selection = 'e';
                 filePath = arguments.getOptionValue("encrypt");
             } else if (arguments.hasOption("decrypt")) {
-                selection = 'd';
+                selection = (arguments.hasOption("checkkey")) ? 'c' : 'd';
                 filePath = arguments.getOptionValue("decrypt");
             }
         }
@@ -102,8 +102,9 @@ public class Arguments {
     public boolean checkForConflicts() {
         boolean hasEncrypt = arguments.hasOption("encrypt");
         boolean hasDecrypt = arguments.hasOption("decrypt");
-        // Checks for the XOR of both to see if one and only one is present.
-        return !(hasEncrypt ^ hasDecrypt);
+        boolean hasCheckKey = arguments.hasOption("checkkey");
+        // Checks for the XOR to see if one and only one option is present.
+        return !((hasEncrypt ^ hasDecrypt) ^ hasCheckKey);
     }
 
     /**
@@ -233,5 +234,9 @@ public class Arguments {
         options.addOption(help);
         Option obfuscate = new Option("r", false, "Randomize filename");
         options.addOption(obfuscate);
+        Option checkKey = Option.builder("c").longOpt("checkkey").argName("PASSWORD").hasArg().desc(
+                "Checks the encrypted password. Requires the decryption flag, but does not continue with decryption step.")
+                .build();
+        options.addOption(checkKey);
     }
 }

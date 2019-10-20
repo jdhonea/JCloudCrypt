@@ -53,6 +53,7 @@ public class JCloudCrypt {
                 System.out.println("Error: Conditions out of bounds!");
             }
         }
+        System.exit(0);
     }
 
     /**
