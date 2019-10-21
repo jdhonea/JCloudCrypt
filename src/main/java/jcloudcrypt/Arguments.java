@@ -102,9 +102,8 @@ public class Arguments {
     public boolean checkForConflicts() {
         boolean hasEncrypt = arguments.hasOption("encrypt");
         boolean hasDecrypt = arguments.hasOption("decrypt");
-        boolean hasCheckKey = arguments.hasOption("checkkey");
         // Checks for the XOR to see if one and only one option is present.
-        return !((hasEncrypt ^ hasDecrypt) ^ hasCheckKey);
+        return !(hasEncrypt ^ hasDecrypt);
     }
 
     /**
@@ -234,8 +233,8 @@ public class Arguments {
         options.addOption(help);
         Option obfuscate = new Option("r", false, "Randomize filename");
         options.addOption(obfuscate);
-        Option checkKey = Option.builder("c").longOpt("checkkey").argName("PASSWORD").hasArg().desc(
-                "Checks the encrypted password. Requires the decryption flag, but does not continue with decryption step.")
+        Option checkKey = Option.builder("c").longOpt("checkkey").argName("PASSWORD").desc(
+                "Checks the encrypted password. Requires the decryption flag, but does not continue with decryption step. Returns 0 on success, 1 on failure.")
                 .build();
         options.addOption(checkKey);
     }

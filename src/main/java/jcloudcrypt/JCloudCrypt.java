@@ -20,6 +20,7 @@ File Header Layout:
 *only present if Random Name Flag = 1
 */
 
+// TODO: Implement an external key checking method. - Work in progress
 // TODO: Get in-depth test cases setup
 // TODO: Get error messages setup for user.
 // TODO: Create a method to allow users to securely delete the original file.
@@ -45,15 +46,19 @@ public class JCloudCrypt {
         } else {
             status = arguments.runArgumentChecks(arguments);
             if (status == 0) {
-                char[] password = (arguments.getSelection() == 'e') ? readEncryptPassword()
-                        : readDecryptPassword(arguments.getFilePath());
-                if (password != null)
-                    status = objectFactory(arguments, password);
+                if (arguments.getSelection() != 'c') {
+                    char[] password = (arguments.getSelection() == 'e') ? readEncryptPassword()
+                            : readDecryptPassword(arguments.getFilePath());
+                    if (password != null)
+                        status = objectFactory(arguments, password);
+                } else {
+                    char[] key = readCheckKey();
+                    runCheckKey(arguments.getFilePath(), key);
+                }
             } else {
                 System.out.println("Error: Conditions out of bounds!");
             }
         }
-        System.exit(0);
     }
 
     /**
@@ -88,7 +93,8 @@ public class JCloudCrypt {
     }
 
     /**
-     * Reads password and password verifcation from user for file encryption.
+     * Reads password and password verifcation from user for file encryption. Gives
+     * user 3 attempts before failing. Upon failure, a null value is returned.
      * 
      * @return user's password in a char array, null if not verified
      */
@@ -137,5 +143,34 @@ public class JCloudCrypt {
             count--;
         }
         return null;
+    }
+
+    /**
+     * Reads the key from console for the key check.
+     * 
+     * @return char array containing the key guess.
+     */
+    static char[] readCheckKey() {
+        Console console = System.console();
+        char[] key = console.readPassword("Password: ");
+        return key;
+    }
+
+    /**
+     * Wrapper for the check key function. Used when the user calls the check key
+     * option from command line. Exits the JVM and returns the status.
+     * 
+     * @param filePath String containing path to file
+     * @param key      Key to be tested in a char array
+     */
+    static void runCheckKey(String filePath, char[] key) {
+        Decrypt decrypt = new Decrypt();
+        int status = (decrypt.checkKey(key, filePath)) ? 0 : 1;
+        if (status == 0) {
+            System.out.println("Key is valid!");
+        } else {
+            System.out.println("Invalid key.");
+        }
+        System.exit(status);
     }
 }

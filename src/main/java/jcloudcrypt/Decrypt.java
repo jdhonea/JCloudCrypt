@@ -97,9 +97,6 @@ public class Decrypt {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        if (!matches) {
-            System.exit(1);
-        }
         return matches;
     }
 
