@@ -12,6 +12,12 @@ import org.apache.commons.cli.ParseException;
 import org.apache.commons.lang3.StringUtils;
 
 public class Arguments {
+    private static final int MEMORY_UPPER_BOUND = 1024;
+    private static final int MEMORY_LOWER_BOUND = 1;
+    private static final int PARALLELISM_LOWER_BOUND = 1;
+    private static final int PARALLELISM_UPPER_BOUND = 32;
+    private static final int TIMECOST_UPPER_BOUND = 100;
+    private static final int TIMECOST_LOWER_BOUND = 1;
     /** Encryption / Decryption flag. 'e' = encryption and 'd' = decryption */
     private char selection;
     /** Path to file. */
@@ -23,6 +29,12 @@ public class Arguments {
     /** Parse error flag */
     private boolean parserError;
 
+    /**
+     * Arguments constructor.
+     * 
+     * @param args String array containing user's arguments called during program
+     *             invocation.
+     */
     public Arguments(String[] args) {
         options = new Options();
         buildOptions();
@@ -117,7 +129,7 @@ public class Arguments {
             String memCost = arguments.getOptionValue("memCost");
             if (StringUtils.isNumeric(memCost)) {
                 int memCostVal = Integer.parseInt(arguments.getOptionValue("memCost"));
-                if (memCostVal < 1 || memCostVal > 1024)
+                if (memCostVal < MEMORY_LOWER_BOUND || memCostVal > MEMORY_UPPER_BOUND)
                     return true;
             } else
                 return true;
@@ -136,7 +148,7 @@ public class Arguments {
             String parallelism = arguments.getOptionValue("parallelism");
             if (StringUtils.isNumeric(parallelism)) {
                 int parallelismVal = Integer.parseInt(arguments.getOptionValue("parallelism"));
-                if (parallelismVal < 1 || parallelismVal > 32)
+                if (parallelismVal < PARALLELISM_LOWER_BOUND || parallelismVal > PARALLELISM_UPPER_BOUND)
                     return true;
             } else
                 return true;
@@ -155,7 +167,7 @@ public class Arguments {
             String timeCost = arguments.getOptionValue("timeCost");
             if (StringUtils.isNumeric(timeCost)) {
                 int timeCostVal = Integer.parseInt(arguments.getOptionValue("timeCost"));
-                if (timeCostVal < 1 || timeCostVal > 100)
+                if (timeCostVal < TIMECOST_LOWER_BOUND || timeCostVal > TIMECOST_UPPER_BOUND)
                     return true;
             } else
                 return true;
@@ -174,6 +186,14 @@ public class Arguments {
         return !file.isFile();
     }
 
+    /**
+     * Checks the arguments for multiple errors. Runs checks for the following
+     * issues: Argument conflicts, Out of memory cost bounds, Out of parallelism
+     * bounds, Out of time cost bounds, Existence of file
+     * 
+     * @param arguments Arguments user declared during program call
+     * @return error status if found, 0 if no error is found
+     */
     public int runArgumentChecks(Arguments arguments) {
         if (arguments.checkForConflicts()) {
             return 2;

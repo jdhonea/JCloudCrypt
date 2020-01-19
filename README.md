@@ -19,6 +19,9 @@ and then move to /usr/bin
 
 usage: JCloudCrypt [OPTION] -e \<FILE>  
 usage: JCloudCrypt -d \<FILE>  
+-c,--checkkey Checks the encrypted password. Requires the decryption flag,  
+ but does not continue with decryption step. Returns 0 on success, 1 on  
+failure.  
 -d,--decrypt \<FILE> File to be decrypted. Options will be read
 from file header.  
 -e,--encrypt \<FILE> File to be encrypted  
@@ -30,4 +33,5 @@ password hashing (default = 4)
 -t,--timeCost \<NUMBER> Number of passes through memory (default = 10)
 
 `JCloudCrypt -e /path/to/file -r -t 10`  
-`JCloudCrypt -d /path/to/file`
+`JCloudCrypt -d /path/to/file`  
+`JCloudCrypt -d /path/to/file --checkkey`

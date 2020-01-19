@@ -20,7 +20,6 @@ File Header Layout:
 *only present if Random Name Flag = 1
 */
 
-// TODO: Implement an external key checking method. - Work in progress
 // TODO: Get in-depth test cases setup
 // TODO: Get error messages setup for user.
 // TODO: Create a method to allow users to securely delete the original file.
@@ -59,6 +58,7 @@ public class JCloudCrypt {
                 System.out.println("Error: Conditions out of bounds!");
             }
         }
+        System.exit(status);
     }
 
     /**
