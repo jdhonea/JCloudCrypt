@@ -1,6 +1,6 @@
 language: java
 
-nstall: mvn install -DskipTests=true -Dmaven.javadoc.skip=true -Dcobertura.skip=true -B -V
+nstall: install: true
 
 script: "mvn cobertura:cobertura"
 
