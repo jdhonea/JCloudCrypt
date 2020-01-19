@@ -1,7 +1,5 @@
 language: java
 
-install: true
-
 script: "mvn cobertura:cobertura"
 
 after_success:

@@ -142,26 +142,6 @@
           <version>2.5.3</version>
         </plugin>
         <plugin>
-          <groupId>org.codehaus.mojo</groupId>
-          <artifactId>exec-maven-plugin</artifactId>
-          <version>1.4.0</version>
-          <executions>
-            <execution>
-              <id>jcloudcrypt</id>
-              <phase>package</phase>
-              <goals>
-                <goal>exec</goal>
-              </goals>
-              <configuration>
-                <mainClass>jcloudcrypt.JCloudCrypt</mainClass>
-              </configuration>
-            </execution>
-          </executions>
-          <configuration>
-            <mainClass>jcloudcrypt.JCloudCrypt</mainClass>
-          </configuration>
-        </plugin>
-        <plugin>
           <artifactId>maven-clean-plugin</artifactId>
           <version>3.1.0</version>
         </plugin>
