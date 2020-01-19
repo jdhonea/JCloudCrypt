@@ -1,6 +1,6 @@
 language: java
 
-nstall: install: true
+install: true
 
 script: "mvn cobertura:cobertura"
 
